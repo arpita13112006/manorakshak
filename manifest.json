@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Manorakshak",
+  "version": "1.0.0",
+  "description": "Mindful browsing companion: quotes, wellbeing score, and Calm Mode.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Manorakshak"
+  },
+  "permissions": ["storage", "tabs"],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}
