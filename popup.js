@@ -74,6 +74,9 @@ function infoByPercent(p){
   document.getElementById('openAnalysis').onclick = ()=> openPage('analysis.html');
   document.getElementById('openDashboard').onclick = ()=> openPage('dashboard.html');
 
+  // View Dashboard button
+  document.getElementById('viewDashboard').onclick = ()=> openPage('dashboard.html');
+
  const qWrap = document.getElementById('quotes');
   if (qWrap) {
     const div = document.createElement('div');
