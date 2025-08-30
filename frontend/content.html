@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manorakshak - Content Analysis</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="header-content">
+            <div class="back-btn" id="backBtn">
+                <span>←</span> Back to Dashboard
+            </div>
+            <h1>Content Analysis</h1>
+            <div class="user-greeting">
+                <h2>📊 Your Content Insights</h2>
+                <p>Analyze your social media consumption patterns</p>
+            </div>
+        </div>
+    </header>
+
+    <nav class="dashboard-navbar">
+        <div class="navbar-content">
+            <button class="nav-item" data-tab="dashboard">Dashboard</button>
+            <button class="nav-item active" data-tab="content">Content</button>
+            <button class="nav-item" data-tab="analyse">Analyse</button>
+            <button class="nav-item" data-tab="login">Login</button>
+        </div>
+    </nav>
+
+    <div class="mandala-bg">
+        <svg class="mandala-corner top-left" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="80" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.3"/>
+            <path d="M100,20 L110,50 L140,50 L118,68 L128,98 L100,80 L72,98 L82,68 L60,50 L90,50 Z" fill="#FFD700" opacity="0.1"/>
+        </svg>
+        <svg class="mandala-corner bottom-right" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="60" fill="none" stroke="#FF9933" stroke-width="1" opacity="0.2"/>
+            <path d="M100,20 L110,50 L140,50 L118,68 L128,98 L100,80 L72,98 L82,68 L60,50 L90,50 Z" fill="#FF9933" opacity="0.1"/>
+        </svg>
+    </div>
+
+    <main class="dashboard-main">
+        <section class="dashboard-section">
+            <h3>Platform Usage</h3>
+            <div class="platform-grid">
+                <div class="platform-card">
+                    <div class="platform-icon">📱</div>
+                    <h4>Instagram</h4>
+                    <p>2.5 hrs today</p>
+                    <div class="usage-bar"><div class="usage-fill" style="width: 75%"></div></div>
+                </div>
+                <div class="platform-card">
+                    <div class="platform-icon">📺</div>
+                    <h4>YouTube</h4>
+                    <p>1.8 hrs today</p>
+                    <div class="usage-bar"><div class="usage-fill" style="width: 60%"></div></div>
+                </div>
+                <div class="platform-card">
+                    <div class="platform-icon">📘</div>
+                    <h4>Facebook</h4>
+                    <p>0.5 hrs today</p>
+                    <div class="usage-bar"><div class="usage-fill" style="width: 20%"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-section">
+            <h3>Content Categories</h3>
+            <div class="content-categories">
+                <div class="category-item positive">
+                    <span class="category-icon">🌟</span>
+                    <div class="category-info">
+                        <h4>Motivational</h4>
+                        <p>45% of your feed</p>
+                    </div>
+                </div>
+                <div class="category-item neutral">
+                    <span class="category-icon">📰</span>
+                    <div class="category-info">
+                        <h4>News</h4>
+                        <p>25% of your feed</p>
+                    </div>
+                </div>
+                <div class="category-item negative">
+                    <span class="category-icon">😔</span>
+                    <div class="category-info">
+                        <h4>Negative</h4>
+                        <p>20% of your feed</p>
+                    </div>
+                </div>
+                <div class="category-item toxic">
+                    <span class="category-icon">⚠️</span>
+                    <div class="category-info">
+                        <h4>Toxic</h4>
+                        <p>10% of your feed</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="navigation.js"></script>
+    <script>
+        document.getElementById('backBtn').addEventListener('click', () => {
+            window.location.href = 'dashboard.html';
+        });
+    </script>
+</body>
+</html>

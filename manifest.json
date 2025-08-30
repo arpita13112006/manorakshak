@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "Mindful browsing companion: quotes, wellbeing score, and Calm Mode.",
   "action": {
-    "default_popup": "popup.html",
+    "default_popup": "frontend/popup.html",
     "default_title": "Manorakshak"
   },
   "permissions": ["storage", "tabs"],
