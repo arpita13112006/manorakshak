@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manorakshak - Sign Up</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="mandala-bg">
+        <svg class="mandala-corner top-left" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="80" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.3"/>
+            <path d="M100,20 L110,50 L140,50 L118,68 L128,98 L100,80 L72,98 L82,68 L60,50 L90,50 Z" fill="#FFD700" opacity="0.1"/>
+        </svg>
+        <svg class="mandala-corner bottom-right" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="60" fill="none" stroke="#FF9933" stroke-width="1" opacity="0.2"/>
+            <path d="M100,20 L110,50 L140,50 L118,68 L128,98 L100,80 L72,98 L82,68 L60,50 L90,50 Z" fill="#FF9933" opacity="0.1"/>
+        </svg>
+    </div>
+
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>🪷 Manorakshak</h1>
+                <p>Create your account</p>
+            </div>
+
+            <form class="login-form" id="signupForm">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" required>
+                </div>
+                <button type="submit" class="login-btn">Sign Up</button>
+            </form>
+
+            <div class="login-footer">
+                <p>Already have an account? <a href="login.html">Login here</a></p>
+                <p>Continue as <a href="dashboard.html">Guest</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const password = document.getElementById('signupPassword').value;
+            const confirm = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirm) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            alert('Account created successfully! Redirecting to dashboard...');
+            window.location.href = 'dashboard.html';
+        });
+    </script>
+</body>
+</html>
