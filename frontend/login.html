@@ -26,8 +26,8 @@
             </div>
 
             <div class="login-tabs">
-                <button class="tab-btn active" data-tab="login">Login</button>
-                <button class="tab-btn" data-tab="signup">Sign Up</button>
+                <!-- <button class="tab-btn active" data-tab="login">Login</button> -->
+                <!-- <button class="tab-btn" data-tab="signup">Sign Up</button> -->
             </div>
 
             <form class="login-form" id="loginForm">
@@ -43,7 +43,7 @@
                 <a href="#" class="forgot-link">Forgot Password?</a>
             </form>
 
-            <form class="login-form hidden" id="signupForm">
+            <!-- <form class="login-form hidden" id="signupForm">
                 <div class="form-group">
                     <label for="name">Full Name</label>
                     <input type="text" id="name" required>
@@ -59,49 +59,16 @@
                 <div class="form-group">
                     <label for="confirmPassword">Confirm Password</label>
                     <input type="password" id="confirmPassword" required>
-                </div>
-                <button type="submit" class="login-btn">Sign Up</button>
-            </form>
+                </div> -->
+                <!-- <button type="submit" class="login-btn">Sign Up</button>
+            </form> -->
 
             <div class="login-footer">
-                <p>Continue as <a href="dashboard.html">Guest</a></p>
+                <p>Don't have an account? <button id="openSignupBtn" class="login-btn" style="width:auto;padding:0.4em 1.2em;font-size:1em;display:inline-block;vertical-align:middle;">Sign Up</button></p>
             </div>
         </div>
     </div>
 
-    <script>
-        // Tab switching
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                const tab = btn.dataset.tab;
-                document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
-                document.getElementById('signupForm').classList.toggle('hidden', tab !== 'signup');
-            });
-        });
-
-        // Form submissions
-        document.getElementById('loginForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Login successful! Redirecting to dashboard...');
-            window.location.href = 'dashboard.html';
-        });
-
-        document.getElementById('signupForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const password = document.getElementById('signupPassword').value;
-            const confirm = document.getElementById('confirmPassword').value;
-            
-            if (password !== confirm) {
-                alert('Passwords do not match!');
-                return;
-            }
-            
-            alert('Account created successfully! Redirecting to dashboard...');
-            window.location.href = 'dashboard.html';
-        });
-    </script>
+<script src="navigation.js"></script>
 </body>
 </html>

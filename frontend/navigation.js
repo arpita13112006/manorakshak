@@ -23,5 +23,28 @@ function setupNavigation() {
     });
 }
 
-// Initialize navigation when DOM is loaded
-document.addEventListener('DOMContentLoaded', setupNavigation);
+// Login page specific logic
+function setupLoginPage() {
+    // Sign Up button in login footer
+    var signupBtn = document.getElementById('openSignupBtn');
+    if (signupBtn) {
+        signupBtn.addEventListener('click', function() {
+            window.location.href = 'signup.html';
+        });
+    }
+
+    // Login form submission
+    var loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Login successful! Redirecting to dashboard...');
+            window.location.href = 'dashboard.html';
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    setupNavigation();
+    setupLoginPage();
+});

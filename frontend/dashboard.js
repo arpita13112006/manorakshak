@@ -425,3 +425,6 @@ class DashboardManager {
 document.addEventListener('DOMContentLoaded', () => {
     new DashboardManager();
 });
+document.getElementById('signupNavBtn').addEventListener('click', function() {
+    window.location.href = 'signup.html';
+});

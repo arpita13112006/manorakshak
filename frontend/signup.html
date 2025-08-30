@@ -22,7 +22,12 @@
         <div class="login-card">
             <div class="login-header">
                 <h1>🪷 Manorakshak</h1>
-                <p>Create your account</p>
+                <p>Your mindful browsing companion</p>
+            </div>
+
+            <div class="login-tabs">
+                <!-- <button class="tab-btn" onclick="window.location.href='login.html'">Login</button> -->
+                <!-- <button class="tab-btn active">Sign Up</button> -->
             </div>
 
             <form class="login-form" id="signupForm">
@@ -46,23 +51,41 @@
             </form>
 
             <div class="login-footer">
-                <p>Already have an account? <a href="login.html">Login here</a></p>
-                <p>Continue as <a href="dashboard.html">Guest</a></p>
+                <p>Already have an account? <a href="login.html">Login</a></p>
             </div>
         </div>
     </div>
 
     <script>
-        document.getElementById('signupForm').addEventListener('submit', (e) => {
+        // Tab highlight
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-btn')[1].classList.add('active');
+
+        // Signup form validation (same as login.html)
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
             const password = document.getElementById('signupPassword').value;
             const confirm = document.getElementById('confirmPassword').value;
-            
+
+            if (!name || !email || !password || !confirm) {
+                alert('Please fill in all fields.');
+                return;
+            }
+            const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+            if (!emailPattern.test(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+            if (password.length < 6) {
+                alert('Password must be at least 6 characters.');
+                return;
+            }
             if (password !== confirm) {
                 alert('Passwords do not match!');
                 return;
             }
-            
             alert('Account created successfully! Redirecting to dashboard...');
             window.location.href = 'dashboard.html';
         });
