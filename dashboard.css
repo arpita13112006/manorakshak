@@ -26,16 +26,20 @@
 
 body {
     font-family: 'Inter', 'SF Pro Text', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--background);
-    color: var(--text-primary);
+  background-image: url("flower.jpg");
+    background-size: cover;
+    background-position: center;    color: var(--text-primary);
     line-height: 1.6;
     min-height: 100vh;
 }
 
 /* Header Styles */
 .dashboard-header {
-    background: var(--gradient);
+  
     color: white;
+    padding: 2rem 0;
+    text-align: center;
+    position: relative;    color: white;
     padding: 2rem 0;
     text-align: center;
     position: relative;
