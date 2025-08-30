@@ -29,7 +29,7 @@ body {
     overflow-x: hidden;
     font-size: 16px;
     font-weight: 500;
-    background-image: url('../flower.jpg'), url('flower.jpg'), url('./flower.jpg');
+    background-image: url('flower.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
