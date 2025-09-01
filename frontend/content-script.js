@@ -288,3 +288,92 @@ setInterval(() => {
         setTimeout(() => toggleCalmMode(calmModeActive), 500);
     }
 }, 1000);
+
+// === GOAL-BASED YOUTUBE FILTERING ===
+
+let savedGoals = [];
+
+function fetchGoalsAndFilter() {
+    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+        chrome.storage.local.get(['goals'], (result) => {
+            savedGoals = (result.goals || []).map(g => g.goal ? g.goal : g).filter(Boolean);
+            filterYouTubeFeed();
+        });
+    } else {
+        // fallback: no filtering
+        savedGoals = [];
+    }
+}
+
+function filterYouTubeFeed() {
+    if (!Array.isArray(savedGoals) || savedGoals.length === 0) return;
+    // Lowercase all goal keywords for case-insensitive match
+    const goalKeywords = savedGoals.map(g => g.toLowerCase());
+
+    // Helper: check if any goal matches text
+    function matchesGoal(text) {
+        if (!text) return false;
+        const lower = text.toLowerCase();
+        return goalKeywords.some(goal => lower.includes(goal));
+    }
+
+    // --- Homepage & Recommended Feed ---
+    // Video grid items
+    document.querySelectorAll('ytd-rich-item-renderer, ytd-video-renderer, ytd-grid-video-renderer, ytd-reel-video-renderer, ytd-compact-video-renderer').forEach(el => {
+        // Title
+        let title = '';
+        let channel = '';
+        // Try to get title
+        const titleEl = el.querySelector('#video-title') || el.querySelector('a#video-title') || el.querySelector('yt-formatted-string.title');
+        if (titleEl) title = titleEl.textContent.trim();
+        // Try to get channel name
+        const channelEl = el.querySelector('ytd-channel-name, .ytd-channel-name, #channel-name, .channel-name');
+        if (channelEl) channel = channelEl.textContent.trim();
+        // If neither matches, hide
+        if (!matchesGoal(title) && !matchesGoal(channel)) {
+            el.style.display = 'none';
+        } else {
+            el.style.display = '';
+        }
+    });
+
+    // --- Shorts ---
+    document.querySelectorAll('ytd-reel-item-renderer, ytd-reel-video-renderer').forEach(el => {
+        let title = '';
+        let channel = '';
+        const titleEl = el.querySelector('#video-title') || el.querySelector('a#video-title') || el.querySelector('yt-formatted-string.title');
+        if (titleEl) title = titleEl.textContent.trim();
+        const channelEl = el.querySelector('ytd-channel-name, .ytd-channel-name, #channel-name, .channel-name');
+        if (channelEl) channel = channelEl.textContent.trim();
+        if (!matchesGoal(title) && !matchesGoal(channel)) {
+            el.style.display = 'none';
+        } else {
+            el.style.display = '';
+        }
+    });
+}
+
+// Observe DOM changes to re-apply filtering
+let ytGoalFilterObserver = null;
+function startYouTubeGoalFilterObserver() {
+    if (ytGoalFilterObserver) return;
+    const target = document.body;
+    ytGoalFilterObserver = new MutationObserver((mutations) => {
+        // Only re-filter if video elements are added/removed
+        for (const m of mutations) {
+            if (m.addedNodes.length || m.removedNodes.length) {
+                filterYouTubeFeed();
+                break;
+            }
+        }
+    });
+    ytGoalFilterObserver.observe(target, { childList: true, subtree: true });
+}
+
+// Initial fetch and filter
+if (window.location.hostname.includes('youtube.com')) {
+    fetchGoalsAndFilter();
+    startYouTubeGoalFilterObserver();
+    // Also re-fetch goals every 10s in case popup changes them
+    setInterval(fetchGoalsAndFilter, 10000);
+}

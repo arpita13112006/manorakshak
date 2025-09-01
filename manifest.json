@@ -9,7 +9,10 @@
   },
   "permissions": ["storage", "tabs", "activeTab"],
   "content_scripts": [{
-    "matches": ["*://*.instagram.com/*", "*://*.youtube.com/*", "*://*.facebook.com/*", "*://*.twitter.com/*", "*://*.x.com/*"],
+    "matches": [
+      "*://*.youtube.com/*",
+      "*://youtube.com/*"
+    ],
     "js": ["frontend/content-script.js"]
   }],
 
