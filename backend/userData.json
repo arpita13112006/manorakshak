@@ -1,0 +1,23 @@
+{
+  "moodScore": 60,
+  "sentimentTrend": [
+    45,
+    52,
+    48,
+    65,
+    70,
+    58,
+    60
+  ],
+  "contentBreakdown": {
+    "uplifting": 40,
+    "negative": 25,
+    "neutral": 30,
+    "toxic": 5
+  },
+  "alerts": [],
+  "calmMode": false,
+  "goals": [],
+  "insights": [],
+  "analyzedContent": []
+}
