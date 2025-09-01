@@ -22,17 +22,18 @@ class DashboardManager {
 
     async loadUserData() {
         try {
-            // Load user data from storage
-            const userData = await this.getFromStorage(['userData', 'dailyScore', 'trendData', 'contentBreakdown', 'alerts', 'achievements', 'calmModeEnabled']);
-            
-            this.currentUser = userData.userData?.name || 'User';
-            this.dailyScore = userData.dailyScore || this.generateDailyScore();
-            this.trendData = userData.trendData || this.generateTrendData();
-            this.contentBreakdown = userData.contentBreakdown || this.generateContentBreakdown();
-            this.alerts = userData.alerts || this.generateSampleAlerts();
-            this.achievements = userData.achievements || this.generateAchievements();
-            this.calmModeEnabled = userData.calmModeEnabled || false;
-            
+            const response = await fetch('http://localhost:3000/api/dashboard');
+            if (response.ok) {
+                const data = await response.json();
+                this.dailyScore = data.moodScore;
+                this.trendData = this.generateTrendDataFromArray(data.sentimentTrend);
+                this.contentBreakdown = data.contentBreakdown;
+                this.calmModeEnabled = data.calmMode;
+                this.alerts = data.alerts.length ? data.alerts : this.generateSampleAlerts();
+                this.achievements = this.generateAchievements();
+            } else {
+                throw new Error('Backend not available');
+            }
         } catch (error) {
             console.log('Using default data:', error);
             this.generateDefaultData();
@@ -179,14 +180,27 @@ class DashboardManager {
         // Calm Mode toggle
         const calmToggle = document.getElementById('dashboardCalmToggle');
         calmToggle.checked = this.calmModeEnabled;
-        calmToggle.addEventListener('change', (e) => {
+        calmToggle.addEventListener('change', async (e) => {
             this.calmModeEnabled = e.target.checked;
             this.updateCalmMode();
-            this.saveToStorage({ calmModeEnabled: this.calmModeEnabled });
+            await this.updateCalmModeBackend(this.calmModeEnabled);
         });
 
         // Update calm mode display
         this.updateCalmMode();
+        
+        // Goals functionality
+        document.getElementById('addGoalBtn').addEventListener('click', () => {
+            this.addGoal();
+        });
+        
+        document.getElementById('goalInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.addGoal();
+        });
+        
+        // Load insights and goals
+        this.loadInsights();
+        this.loadGoals();
     }
 
     updateCalmMode() {
@@ -214,8 +228,33 @@ class DashboardManager {
 
 
     initializeCharts() {
-        this.initializeTrendChart();
-        this.initializeContentPieChart();
+        if (typeof Chart !== 'undefined') {
+            this.initializeTrendChart();
+            this.initializeContentPieChart();
+        } else {
+            console.log('Chart.js not loaded, using fallback');
+            this.createFallbackCharts();
+        }
+    }
+    
+    createFallbackCharts() {
+        // Simple fallback for trend chart
+        const trendCanvas = document.getElementById('trendChart');
+        if (trendCanvas) {
+            trendCanvas.style.display = 'none';
+            const fallback = document.createElement('div');
+            fallback.innerHTML = '<p style="text-align: center; color: #666;">📈 Trend data available - Chart.js loading...</p>';
+            trendCanvas.parentNode.appendChild(fallback);
+        }
+        
+        // Simple fallback for pie chart
+        const pieCanvas = document.getElementById('contentPieChart');
+        if (pieCanvas) {
+            pieCanvas.style.display = 'none';
+            const fallback = document.createElement('div');
+            fallback.innerHTML = '<p style="text-align: center; color: #666;">🥧 Content breakdown available - Chart.js loading...</p>';
+            pieCanvas.parentNode.appendChild(fallback);
+        }
     }
 
     initializeTrendChart() {
@@ -398,18 +437,139 @@ class DashboardManager {
         }
     }
 
+    generateTrendDataFromArray(scores) {
+        const data = [];
+        const today = new Date();
+        
+        scores.forEach((score, i) => {
+            const date = new Date(today);
+            date.setDate(date.getDate() - (6 - i));
+            data.push({
+                date: date.toISOString().slice(0, 10),
+                score: score
+            });
+        });
+        
+        return data;
+    }
+
+    async updateCalmModeBackend(enabled) {
+        try {
+            await fetch('http://localhost:3000/api/calm-mode', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ enabled })
+            });
+        } catch (error) {
+            console.log('Backend update failed:', error);
+        }
+    }
+
+    async addGoal() {
+        const input = document.getElementById('goalInput');
+        const goal = input.value.trim();
+        
+        if (!goal) return;
+        
+        try {
+            await fetch('http://localhost:3000/api/goals', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ goal })
+            });
+            
+            input.value = '';
+            this.loadGoals();
+        } catch (error) {
+            console.log('Goal add failed:', error);
+        }
+    }
+    
+    async loadGoals() {
+        try {
+            const response = await fetch('http://localhost:3000/api/dashboard');
+            const data = await response.json();
+            this.populateGoals(data.goals || []);
+        } catch (error) {
+            console.log('Goals load failed:', error);
+        }
+    }
+    
+    async loadInsights() {
+        try {
+            const response = await fetch('http://localhost:3000/api/insights');
+            const data = await response.json();
+            this.populateInsights(data.insights || []);
+            this.populateRecentContent(data.analyzedContent || []);
+        } catch (error) {
+            console.log('Insights load failed:', error);
+        }
+    }
+    
+    populateGoals(goals) {
+        const container = document.getElementById('goalsContainer');
+        
+        if (goals.length === 0) {
+            container.innerHTML = '<p style="text-align: center; color: #666;">No goals set yet. Add your first learning goal!</p>';
+            return;
+        }
+        
+        container.innerHTML = goals.map(goal => `
+            <div class="goal-item">
+                <span class="goal-text">${goal.goal}</span>
+                <span class="goal-date">Added ${new Date(goal.created).toLocaleDateString()}</span>
+            </div>
+        `).join('');
+    }
+    
+    populateInsights(insights) {
+        const container = document.getElementById('insightsContainer');
+        
+        if (insights.length === 0) {
+            container.innerHTML = '<p style="text-align: center; color: #666;">No insights available yet. Browse some content to get insights!</p>';
+            return;
+        }
+        
+        container.innerHTML = insights.map(insight => `
+            <div class="insight-item ${insight.type}">
+                <span class="insight-icon">${insight.icon}</span>
+                <span class="insight-message">${insight.message}</span>
+            </div>
+        `).join('');
+    }
+    
+    populateRecentContent(content) {
+        const container = document.getElementById('recentContentContainer');
+        
+        if (content.length === 0) {
+            container.innerHTML = '<p style="text-align: center; color: #666;">No content analyzed yet. Visit YouTube or social media to see analysis!</p>';
+            return;
+        }
+        
+        container.innerHTML = content.map(item => `
+            <div class="content-item ${item.sentiment}">
+                <div class="content-text">${item.text}...</div>
+                <div class="content-meta">
+                    <span class="sentiment-badge ${item.sentiment}">${item.sentiment}</span>
+                    <span class="platform">${item.platform}</span>
+                    <span class="time">${new Date(item.timestamp).toLocaleTimeString()}</span>
+                </div>
+            </div>
+        `).join('');
+    }
+
     startRealTimeUpdates() {
-        // Update data every 5 minutes
         setInterval(() => {
             this.loadUserData().then(() => {
                 this.populateDashboard();
-                if (this.trendChart) {
+                this.loadInsights();
+                if (this.trendChart && typeof Chart !== 'undefined') {
                     this.trendChart.data.datasets[0].data = this.trendData.map(d => d.score);
                     this.trendChart.update();
                 }
-                if (this.contentChart) {
+                if (this.contentChart && typeof Chart !== 'undefined') {
                     this.contentChart.data.datasets[0].data = [
-                        this.contentBreakdown.positive,
+                        this.contentBreakdown.uplifting,
                         this.contentBreakdown.negative,
                         this.contentBreakdown.neutral,
                         this.contentBreakdown.toxic
@@ -417,7 +577,7 @@ class DashboardManager {
                     this.contentChart.update();
                 }
             });
-        }, 5 * 60 * 1000); // 5 minutes
+        }, 10000); // 10 seconds
     }
 }
 

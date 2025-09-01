@@ -7,10 +7,16 @@
     "default_popup": "frontend/popup.html",
     "default_title": "Manorakshak"
   },
-  "permissions": ["storage", "tabs"],
+  "permissions": ["storage", "tabs", "activeTab"],
+  "content_scripts": [{
+    "matches": ["*://*.instagram.com/*", "*://*.youtube.com/*", "*://*.facebook.com/*", "*://*.twitter.com/*", "*://*.x.com/*"],
+    "js": ["frontend/content-script.js"]
+  }],
+
   "icons": {
     "16": "frontend/icon16.png",
     "48": "frontend/icon48.png",
     "128": "frontend/icon128.png"
-  }
+  },
+  "host_permissions": ["http://localhost:3000/*"]
 }

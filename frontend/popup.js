@@ -98,11 +98,9 @@ function infoByPercent(p){
 
   // Calm Mode: load + toggle with chrome.storage
   const calmToggle = document.getElementById('calmToggle');
-  const calmState = document.getElementById('calmState');
 
   function setCalmState(on){
     calmToggle.checked = !!on;
-    calmState.textContent = on ? "ON" : "OFF";
   }
 
   try {
@@ -115,9 +113,22 @@ function infoByPercent(p){
     setCalmState(v);
   }
 
-  calmToggle.addEventListener('change', ()=>{
+  calmToggle.addEventListener('change', async ()=>{
     const on = calmToggle.checked;
     setCalmState(on);
+    
+    // Update backend
+    try {
+      await fetch('http://localhost:3000/api/calm-mode', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ enabled: on })
+      });
+    } catch (error) {
+      console.log('Backend update failed:', error);
+    }
+    
+    // Update local storage
     try { chrome.storage.local.set({ calmModeEnabled: on }); }
     catch (_){ localStorage.setItem('calmModeEnabled', String(on)); }
   });

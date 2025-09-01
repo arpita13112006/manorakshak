@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manorakshak - User Dashboard</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="chart.min.js"></script>
 </head>
 <body>
     <!-- Header / Welcome Section -->
@@ -33,6 +33,17 @@
             
         </div>
     </nav>
+
+    <!-- Chakra Background -->
+    <div class="chakra-background">
+        <div class="chakra"></div>
+        <div class="chakra"></div>
+        <div class="chakra"></div>
+        <div class="chakra"></div>
+        <div class="chakra"></div>
+        <div class="chakra"></div>
+        <div class="chakra"></div>
+    </div>
 
     <!-- Mandala Background -->
     <div class="mandala-bg">
@@ -170,6 +181,36 @@
                 <div class="calm-suggestions" id="calmSuggestions">
                     <!-- Suggestions will be shown when Calm Mode is enabled -->
                 </div>
+            </div>
+        </section>
+
+        <!-- Goals Section -->
+        <section class="dashboard-section goals-section">
+            <h3>Your Learning Goals</h3>
+            <div class="goals-container">
+                <div class="add-goal">
+                    <input type="text" id="goalInput" placeholder="e.g., Learn English, Fitness, Coding..." maxlength="50">
+                    <button id="addGoalBtn">Add Goal</button>
+                </div>
+                <div id="goalsContainer">
+                    <!-- Goals will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Insights Section -->
+        <section class="dashboard-section insights-section">
+            <h3>Content Insights</h3>
+            <div id="insightsContainer">
+                <!-- Insights will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Recent Content Analysis -->
+        <section class="dashboard-section recent-content-section">
+            <h3>Recently Analyzed Content</h3>
+            <div id="recentContentContainer">
+                <!-- Recent content will be populated by JavaScript -->
             </div>
         </section>
 
