@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const app = express();
 
 app.use(express.json());
@@ -7,6 +8,30 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     next();
 });
+
+// MongoDB Schema
+const userDataSchema = new mongoose.Schema({
+    userId: { type: String, default: 'default' },
+    moodScore: { type: Number, default: 60 },
+    sentimentTrend: { type: [Number], default: [45, 52, 48, 65, 70, 58, 60] },
+    contentBreakdown: {
+        uplifting: { type: Number, default: 40 },
+        negative: { type: Number, default: 25 },
+        neutral: { type: Number, default: 30 },
+        toxic: { type: Number, default: 5 }
+    },
+    alerts: { type: Array, default: [] },
+    calmMode: { type: Boolean, default: false },
+    goals: { type: Array, default: [] },
+    insights: { type: Array, default: [] },
+    analyzedContent: { type: Array, default: [] },
+    lastUpdated: { type: Date, default: Date.now }
+});
+
+const UserData = mongoose.model('UserData', userDataSchema);
+
+// MongoDB connection - REPLACE WITH YOUR CLUSTER ID
+const MONGODB_URI = 'mongodb+srv://<username>:<password>@<cluster-id>.mongodb.net/manorakshak?retryWrites=true&w=majority';
 
 let userData = {
     moodScore: 60,
@@ -18,6 +43,45 @@ let userData = {
     insights: [],
     analyzedContent: []
 };
+
+async function connectMongoDB() {
+    try {
+        await mongoose.connect(MONGODB_URI);
+        console.log('Connected to MongoDB');
+        await loadUserData();
+    } catch (error) {
+        console.log('MongoDB connection failed, using local data:', error.message);
+    }
+}
+
+async function loadUserData() {
+    try {
+        let data = await UserData.findOne({ userId: 'default' });
+        if (!data) {
+            data = new UserData({ userId: 'default' });
+            await data.save();
+        }
+        userData = data.toObject();
+        console.log('User data loaded from MongoDB');
+    } catch (error) {
+        console.log('Using default data:', error.message);
+    }
+}
+
+async function saveUserData() {
+    try {
+        await UserData.findOneAndUpdate(
+            { userId: 'default' },
+            { ...userData, lastUpdated: new Date() },
+            { upsert: true }
+        );
+    } catch (error) {
+        console.log('Failed to save to MongoDB:', error.message);
+    }
+}
+
+// Connect to MongoDB on startup
+connectMongoDB();
 
 app.get('/', (req, res) => {
     res.send("Manorakshak Backend Running!");
@@ -36,6 +100,7 @@ app.post('/api/mood', (req, res) => {
 app.post('/api/calm-mode', (req, res) => {
     const { enabled } = req.body;
     userData.calmMode = enabled;
+    saveUserData();
     res.json({ success: true, calmMode: enabled });
 });
 
@@ -78,6 +143,7 @@ app.post('/api/goals', (req, res) => {
         created: new Date(),
         progress: 0
     });
+    saveUserData();
     res.json({ success: true, goals: userData.goals });
 });
 
@@ -133,6 +199,9 @@ function updateUserData(sentiment, platform) {
     // Update trend
     userData.sentimentTrend.shift();
     userData.sentimentTrend.push(userData.moodScore);
+    
+    // Save data after each update
+    saveUserData();
 }
 
 function generateInsights() {
@@ -169,6 +238,18 @@ function generateInsights() {
     return insights;
 }
 
+// Save data every 30 seconds
+setInterval(saveUserData, 30000);
+
+// Save data on exit
+process.on('SIGINT', async () => {
+    console.log('Saving data before exit...');
+    await saveUserData();
+    await mongoose.connection.close();
+    process.exit(0);
+});
+
 app.listen(3000, () => {
     console.log("Server is running on port 3000");
+    console.log('Data will be saved to MongoDB');
 });
