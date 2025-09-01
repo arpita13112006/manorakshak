@@ -9,8 +9,8 @@ function analyzeContent() {
     isAnalyzing = true;
     
     console.log('Manorakshak: Analyzing content...');
-    const platform = 'YouTube';
-    const content = getYouTubeContent();
+    const platform = getPlatform();
+    const content = getContentFromPage();
     
     content.forEach(item => {
         if (item.text && item.text.length > 5 && !processedElements.has(item.id)) {
@@ -23,44 +23,97 @@ function analyzeContent() {
     setTimeout(() => { isAnalyzing = false; }, 1000);
 }
 
-function getYouTubeContent() {
+function getContentFromPage() {
     let content = [];
+    const platform = getPlatform();
     
     try {
-        // Video titles
-        const titles = document.querySelectorAll('h1.ytd-video-primary-info-renderer, #video-title, a#video-title');
-        titles.forEach((title, index) => {
-            if (title.textContent.trim()) {
-                content.push({
-                    text: title.textContent.trim(),
-                    id: 'title-' + index + '-' + title.textContent.length
-                });
-            }
-        });
+        if (platform === 'YouTube') {
+            // Video titles
+            const titles = document.querySelectorAll('h1.ytd-video-primary-info-renderer, #video-title, a#video-title, .ytd-rich-grid-media #video-title');
+            titles.forEach((title, index) => {
+                if (title.textContent.trim()) {
+                    content.push({
+                        text: title.textContent.trim(),
+                        id: 'yt-title-' + index + '-' + title.textContent.length
+                    });
+                }
+            });
+            
+            // Comments
+            const comments = document.querySelectorAll('#content-text, .ytd-comment-renderer #content-text');
+            comments.forEach((comment, index) => {
+                if (comment.textContent.trim()) {
+                    content.push({
+                        text: comment.textContent.trim(),
+                        id: 'yt-comment-' + index + '-' + comment.textContent.length
+                    });
+                }
+            });
+            
+            // Video descriptions
+            const descriptions = document.querySelectorAll('.ytd-video-secondary-info-renderer #description, #description-text');
+            descriptions.forEach((desc, index) => {
+                if (desc.textContent.trim()) {
+                    content.push({
+                        text: desc.textContent.trim().substring(0, 200),
+                        id: 'yt-desc-' + index + '-' + desc.textContent.length
+                    });
+                }
+            });
+        }
         
-        // Comments
-        const comments = document.querySelectorAll('#content-text, .ytd-comment-renderer #content-text');
-        comments.forEach((comment, index) => {
-            if (comment.textContent.trim()) {
-                content.push({
-                    text: comment.textContent.trim(),
-                    id: 'comment-' + index + '-' + comment.textContent.length
-                });
-            }
-        });
+        if (platform === 'Instagram') {
+            // Instagram captions
+            const captions = document.querySelectorAll('article span, [data-testid="post-caption"], .x1lliihq span, ._a9zs span');
+            captions.forEach((caption, index) => {
+                if (caption.textContent.trim() && caption.textContent.length > 10) {
+                    content.push({
+                        text: caption.textContent.trim(),
+                        id: 'ig-caption-' + index + '-' + caption.textContent.length
+                    });
+                }
+            });
+            
+            // Instagram comments
+            const comments = document.querySelectorAll('._a9zs, .C4VMK span, [role="button"] span');
+            comments.forEach((comment, index) => {
+                if (comment.textContent.trim() && comment.textContent.length > 5) {
+                    content.push({
+                        text: comment.textContent.trim(),
+                        id: 'ig-comment-' + index + '-' + comment.textContent.length
+                    });
+                }
+            });
+        }
         
-        // Video descriptions
-        const descriptions = document.querySelectorAll('.ytd-video-secondary-info-renderer #description, #description-text');
-        descriptions.forEach((desc, index) => {
-            if (desc.textContent.trim()) {
-                content.push({
-                    text: desc.textContent.trim().substring(0, 200),
-                    id: 'desc-' + index + '-' + desc.textContent.length
-                });
-            }
-        });
+        if (platform === 'Facebook') {
+            // Facebook posts
+            const posts = document.querySelectorAll('[data-testid="post_message"], .userContent, .x1iorvi4 span');
+            posts.forEach((post, index) => {
+                if (post.textContent.trim() && post.textContent.length > 10) {
+                    content.push({
+                        text: post.textContent.trim(),
+                        id: 'fb-post-' + index + '-' + post.textContent.length
+                    });
+                }
+            });
+        }
         
-        console.log('Manorakshak: Found', content.length, 'content items');
+        if (platform === 'Twitter') {
+            // Twitter tweets
+            const tweets = document.querySelectorAll('[data-testid="tweetText"], .tweet-text, [lang] span');
+            tweets.forEach((tweet, index) => {
+                if (tweet.textContent.trim() && tweet.textContent.length > 10) {
+                    content.push({
+                        text: tweet.textContent.trim(),
+                        id: 'tw-tweet-' + index + '-' + tweet.textContent.length
+                    });
+                }
+            });
+        }
+        
+        console.log(`Manorakshak: Found ${content.length} content items on ${platform}`);
         
     } catch (error) {
         console.log('Manorakshak: Content extraction error:', error);

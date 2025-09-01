@@ -685,6 +685,65 @@ input:checked + .slider:before {
     background: #6c757d;
 }
 
+/* AI Features */
+.ai-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+.ai-btn {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.3s ease;
+}
+
+.ai-btn:hover {
+    transform: translateY(-2px);
+}
+
+.ai-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.ai-report {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 4px solid #667eea;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+.suggestion-card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border-left: 4px solid #4caf50;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.suggestion-card h4 {
+    margin: 0 0 8px 0;
+    color: #333;
+    font-size: 16px;
+}
+
+.suggestion-card p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
 /* Achievements Section */
 .achievements-container {
     display: grid;

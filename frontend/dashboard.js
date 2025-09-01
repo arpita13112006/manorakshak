@@ -201,6 +201,15 @@ class DashboardManager {
         // Load insights and goals
         this.loadInsights();
         this.loadGoals();
+        
+        // AI features
+        document.getElementById('generateReportBtn').addEventListener('click', () => {
+            this.generateAIReport();
+        });
+        
+        document.getElementById('getSuggestionsBtn').addEventListener('click', () => {
+            this.getAISuggestions();
+        });
     }
 
     updateCalmMode() {
@@ -556,6 +565,69 @@ class DashboardManager {
                 </div>
             </div>
         `).join('');
+    }
+
+    async generateAIReport() {
+        const btn = document.getElementById('generateReportBtn');
+        const container = document.getElementById('aiReportContainer');
+        
+        btn.textContent = 'Generating...';
+        btn.disabled = true;
+        container.innerHTML = '<p style="text-align: center;">🤖 AI is analyzing your data...</p>';
+        
+        try {
+            const response = await fetch('http://localhost:3000/api/generate-report', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                container.innerHTML = `<div class="ai-report">${data.report.replace(/\n/g, '<br>')}</div>`;
+            } else {
+                container.innerHTML = '<p style="color: #f44336;">Report generation failed. Please try again.</p>';
+            }
+        } catch (error) {
+            container.innerHTML = '<p style="color: #f44336;">Unable to connect to AI service.</p>';
+        }
+        
+        btn.textContent = 'Generate Report';
+        btn.disabled = false;
+    }
+    
+    async getAISuggestions() {
+        const btn = document.getElementById('getSuggestionsBtn');
+        const container = document.getElementById('aiSuggestionsContainer');
+        
+        btn.textContent = 'Loading...';
+        btn.disabled = true;
+        container.innerHTML = '<p style="text-align: center;">🤖 AI is creating personalized suggestions...</p>';
+        
+        try {
+            const response = await fetch('http://localhost:3000/api/get-suggestions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            
+            const data = await response.json();
+            
+            if (data.success && Array.isArray(data.suggestions)) {
+                container.innerHTML = data.suggestions.map(suggestion => `
+                    <div class="suggestion-card">
+                        <h4>${suggestion.title}</h4>
+                        <p>${suggestion.description}</p>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = '<p style="color: #f44336;">Suggestions unavailable. Please try again.</p>';
+            }
+        } catch (error) {
+            container.innerHTML = '<p style="color: #f44336;">Unable to connect to AI service.</p>';
+        }
+        
+        btn.textContent = 'Get Suggestions';
+        btn.disabled = false;
     }
 
     startRealTimeUpdates() {

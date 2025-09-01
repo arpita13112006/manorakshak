@@ -103,32 +103,53 @@ function infoByPercent(p){
     calmToggle.checked = !!on;
   }
 
-  try {
-    chrome.storage.local.get(['calmModeEnabled'], (res)=>{
-      setCalmState(!!res.calmModeEnabled);
-    });
-  } catch (_) {
-    // fallback
-    const v = localStorage.getItem('calmModeEnabled') === 'true';
-    setCalmState(v);
+  // Load calm mode state from backend
+  async function loadCalmModeState() {
+    try {
+      const response = await fetch('http://localhost:3000/api/dashboard');
+      if (response.ok) {
+        const data = await response.json();
+        setCalmState(data.calmMode);
+      }
+    } catch (error) {
+      // Fallback to local storage
+      try {
+        chrome.storage.local.get(['calmModeEnabled'], (res)=>{
+          setCalmState(!!res.calmModeEnabled);
+        });
+      } catch (_) {
+        const v = localStorage.getItem('calmModeEnabled') === 'true';
+        setCalmState(v);
+      }
+    }
   }
+  
+  loadCalmModeState();
 
   calmToggle.addEventListener('change', async ()=>{
     const on = calmToggle.checked;
     setCalmState(on);
     
-    // Update backend
+    // Update backend (same as dashboard)
     try {
       await fetch('http://localhost:3000/api/calm-mode', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ enabled: on })
       });
+      
+      // Show feedback
+      if (on) {
+        console.log('Calm Mode enabled - YouTube feed will be hidden');
+      } else {
+        console.log('Calm Mode disabled - YouTube feed restored');
+      }
+      
     } catch (error) {
       console.log('Backend update failed:', error);
     }
     
-    // Update local storage
+    // Update local storage as backup
     try { chrome.storage.local.set({ calmModeEnabled: on }); }
     catch (_){ localStorage.setItem('calmModeEnabled', String(on)); }
   });
