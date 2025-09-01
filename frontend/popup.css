@@ -217,7 +217,7 @@ body {
 /* Calm Mode */
 .calm-row {
   display: flex;
-  align-items: center;
+  align-items:center;
   justify-content: center;
 }
 .calm-label {
@@ -265,8 +265,8 @@ body {
 .lotus-icon {
   position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  right:30%;
+  transform: translate(-50%,-50%);
   font-size: 1em; /* scales with text */
   transition: all 0.3s ease;
   opacity: 0.6;
