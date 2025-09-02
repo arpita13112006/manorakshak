@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manorakshak - Deep Analysis</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
     <script src="chart.min.js"></script>
 </head>
 <body>
@@ -15,8 +15,8 @@
             </div>
             <h1>Deep Analysis</h1>
             <div class="user-greeting">
-                <h2>🔍 Mental Health Insights</h2>
-                <p>Advanced analytics for your digital wellbeing</p>
+                <h2 id="analysisGreeting">🔍 Mental Health Insights</h2>
+                <p id="analysisStatus">Loading advanced analytics...</p>
             </div>
         </div>
     </header>
@@ -43,81 +43,60 @@
 
     <main class="dashboard-main">
         <section class="dashboard-section">
-            <h3>Mood Correlation</h3>
-            <div class="analysis-grid">
-                <div class="analysis-card">
-                    <h4>📈 Positive Triggers</h4>
-                    <ul>
-                        <li>Nature videos (+15% mood)</li>
-                        <li>Motivational quotes (+12% mood)</li>
-                        <li>Friend updates (+8% mood)</li>
-                    </ul>
-                </div>
-                <div class="analysis-card">
-                    <h4>📉 Negative Triggers</h4>
-                    <ul>
-                        <li>News content (-20% mood)</li>
-                        <li>Comparison posts (-15% mood)</li>
-                        <li>Toxic comments (-25% mood)</li>
-                    </ul>
-                </div>
+            <h3>Sentiment Trend Analysis</h3>
+            <div class="chart-container">
+                <canvas id="sentimentTrendChart" width="400" height="200"></canvas>
             </div>
         </section>
 
         <section class="dashboard-section">
-            <h3>Weekly Patterns</h3>
-            <div class="pattern-insights">
-                <div class="insight-item">
-                    <span class="insight-icon">🌅</span>
-                    <div>
-                        <h4>Morning Usage</h4>
-                        <p>You're most positive in mornings (8-10 AM)</p>
-                    </div>
-                </div>
-                <div class="insight-item">
-                    <span class="insight-icon">🌙</span>
-                    <div>
-                        <h4>Evening Patterns</h4>
-                        <p>Mood drops after 9 PM - consider digital sunset</p>
-                    </div>
-                </div>
-                <div class="insight-item">
-                    <span class="insight-icon">📱</span>
-                    <div>
-                        <h4>Screen Time</h4>
-                        <p>Peak usage: 6-8 PM (3.2 hrs average)</p>
-                    </div>
-                </div>
+            <h3>Real-Time Mood Correlation</h3>
+            <div id="moodCorrelationContainer">
+                <p style="text-align: center; color: #666;">Loading mood correlation data...</p>
             </div>
         </section>
 
         <section class="dashboard-section">
-            <h3>Recommendations</h3>
-            <div class="recommendations">
-                <div class="recommendation-card">
-                    <span class="rec-icon">🧘</span>
-                    <h4>Mindful Breaks</h4>
-                    <p>Take 5-minute breaks every hour during peak usage</p>
-                </div>
-                <div class="recommendation-card">
-                    <span class="rec-icon">🌿</span>
-                    <h4>Nature Content</h4>
-                    <p>Follow more nature and wellness accounts</p>
-                </div>
-                <div class="recommendation-card">
-                    <span class="rec-icon">🔕</span>
-                    <h4>Digital Detox</h4>
-                    <p>Try 1-hour phone-free periods daily</p>
-                </div>
+            <h3>Content Pattern Analysis</h3>
+            <div id="patternInsightsContainer">
+                <p style="text-align: center; color: #666;">Analyzing your content consumption patterns...</p>
+            </div>
+        </section>
+
+        <section class="dashboard-section">
+            <h3>AI-Powered Insights</h3>
+            <div class="ai-controls">
+                <button id="generateInsightsBtn" class="ai-btn">Generate Deep Insights</button>
+                <button id="getPersonalizedTipsBtn" class="ai-btn">Get Personalized Tips</button>
+            </div>
+            <div id="aiInsightsContainer">
+                <p style="text-align: center; color: #666;">Click "Generate Deep Insights" for AI analysis</p>
+            </div>
+        </section>
+
+        <section class="dashboard-section">
+            <h3>Personalized Recommendations</h3>
+            <div id="recommendationsContainer">
+                <p style="text-align: center; color: #666;">Loading personalized recommendations...</p>
+            </div>
+        </section>
+
+        <section class="dashboard-section">
+            <h3>Mental Health Score Breakdown</h3>
+            <div class="chart-container">
+                <canvas id="scoreBreakdownChart" width="400" height="200"></canvas>
+            </div>
+        </section>
+
+        <section class="dashboard-section">
+            <h3>Weekly Progress Summary</h3>
+            <div id="weeklyProgressContainer">
+                <p style="text-align: center; color: #666;">Loading weekly progress data...</p>
             </div>
         </section>
     </main>
 
     <script src="navigation.js"></script>
-    <script>
-        document.getElementById('backBtn').addEventListener('click', () => {
-            window.location.href = 'dashboard.html';
-        });
-    </script>
+    <script src="analyse.js"></script>
 </body>
 </html>

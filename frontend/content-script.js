@@ -1,8 +1,31 @@
-// Content script to analyze YouTube content
+// Content script to analyze social media content
 console.log('Manorakshak: Content script loaded on', window.location.hostname);
 
 let isAnalyzing = false;
 let processedElements = new Set();
+let extensionValid = true;
+
+// Check if extension context is still valid
+function checkExtensionContext() {
+    try {
+        if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id) {
+            return true;
+        }
+    } catch (error) {
+        extensionValid = false;
+        return false;
+    }
+    return false;
+}
+
+function getPlatform() {
+    const hostname = window.location.hostname;
+    if (hostname.includes('instagram')) return 'Instagram';
+    if (hostname.includes('youtube')) return 'YouTube';
+    if (hostname.includes('facebook')) return 'Facebook';
+    if (hostname.includes('twitter') || hostname.includes('x.com')) return 'Twitter';
+    return 'Unknown';
+}
 
 function analyzeContent() {
     if (isAnalyzing) return;
@@ -123,6 +146,11 @@ function getContentFromPage() {
 }
 
 async function sendToBackend(text, platform) {
+    if (!extensionValid || !checkExtensionContext()) {
+        console.log('Manorakshak: Extension context invalidated, stopping');
+        return;
+    }
+    
     try {
         console.log('Manorakshak: Sending to backend:', text.substring(0, 30));
         
@@ -148,6 +176,11 @@ async function sendToBackend(text, platform) {
             });
         }
     } catch (error) {
+        if (error.message && error.message.includes('Extension context invalidated')) {
+            extensionValid = false;
+            console.log('Manorakshak: Extension reloaded, stopping content script');
+            return;
+        }
         console.log('Manorakshak: Backend communication error:', error);
     }
 }
@@ -166,7 +199,11 @@ window.addEventListener('scroll', () => {
 });
 
 // Analyze new content periodically
-setInterval(() => {
+let analysisInterval = setInterval(() => {
+    if (!extensionValid) {
+        clearInterval(analysisInterval);
+        return;
+    }
     console.log('Manorakshak: Periodic analysis');
     analyzeContent();
 }, 3000);
@@ -175,6 +212,10 @@ setInterval(() => {
 let calmModeActive = false;
 
 async function checkCalmMode() {
+    if (!extensionValid || !checkExtensionContext()) {
+        return;
+    }
+    
     try {
         const response = await fetch('http://localhost:3000/api/dashboard');
         if (response.ok) {
@@ -187,6 +228,10 @@ async function checkCalmMode() {
             }
         }
     } catch (error) {
+        if (error.message && error.message.includes('Extension context invalidated')) {
+            extensionValid = false;
+            return;
+        }
         console.log('Manorakshak: Calm mode check failed:', error);
     }
 }
@@ -327,12 +372,24 @@ function hideCalmModeMessage() {
 }
 
 // Check calm mode status periodically
-setInterval(checkCalmMode, 2000);
+let calmModeInterval = setInterval(() => {
+    if (!extensionValid) {
+        clearInterval(calmModeInterval);
+        return;
+    }
+    checkCalmMode();
+}, 2000);
+
 setTimeout(checkCalmMode, 1000);
 
 // Listen for YouTube navigation changes
 let currentUrl = location.href;
-setInterval(() => {
+let navigationInterval = setInterval(() => {
+    if (!extensionValid) {
+        clearInterval(navigationInterval);
+        return;
+    }
+    
     if (location.href !== currentUrl) {
         currentUrl = location.href;
         console.log('Manorakshak: Page changed, analyzing new content');
@@ -347,13 +404,27 @@ setInterval(() => {
 let savedGoals = [];
 
 function fetchGoalsAndFilter() {
-    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
-        chrome.storage.local.get(['goals'], (result) => {
-            savedGoals = (result.goals || []).map(g => g.goal ? g.goal : g).filter(Boolean);
-            filterYouTubeFeed();
-        });
-    } else {
-        // fallback: no filtering
+    if (!extensionValid || !checkExtensionContext()) {
+        return;
+    }
+    
+    try {
+        if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+            chrome.storage.local.get(['goals'], (result) => {
+                if (chrome.runtime.lastError) {
+                    console.log('Manorakshak: Storage access failed');
+                    return;
+                }
+                savedGoals = (result.goals || []).map(g => g.goal ? g.goal : g).filter(Boolean);
+                filterYouTubeFeed();
+            });
+        } else {
+            savedGoals = [];
+        }
+    } catch (error) {
+        if (error.message && error.message.includes('Extension context invalidated')) {
+            extensionValid = false;
+        }
         savedGoals = [];
     }
 }
@@ -428,5 +499,11 @@ if (window.location.hostname.includes('youtube.com')) {
     fetchGoalsAndFilter();
     startYouTubeGoalFilterObserver();
     // Also re-fetch goals every 10s in case popup changes them
-    setInterval(fetchGoalsAndFilter, 10000);
+    let goalsInterval = setInterval(() => {
+        if (!extensionValid) {
+            clearInterval(goalsInterval);
+            return;
+        }
+        fetchGoalsAndFilter();
+    }, 10000);
 }

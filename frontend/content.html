@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manorakshak - Content Analysis</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
     <script src="chart.min.js"></script>
 </head>
 <body>
@@ -15,8 +15,8 @@
             </div>
             <h1>Content Analysis</h1>
             <div class="user-greeting">
-                <h2>📊 Your Content Insights</h2>
-                <p>Analyze your social media consumption patterns</p>
+                <h2 id="contentGreeting">📊 Your Content Insights</h2>
+                <p id="contentStatus">Loading your content analysis...</p>
             </div>
         </div>
     </header>
@@ -43,58 +43,73 @@
 
     <main class="dashboard-main">
         <section class="dashboard-section">
-            <h3>Platform Usage</h3>
-            <div class="platform-grid">
-                <div class="platform-card">
-                    <div class="platform-icon">📱</div>
-                    <h4>Instagram</h4>
-                    <p>2.5 hrs today</p>
-                    <div class="usage-bar"><div class="usage-fill" style="width: 75%"></div></div>
+            <h3>Platform Usage Analysis</h3>
+            <div id="platformUsageContainer">
+                <p style="text-align: center; color: #666;">Loading platform data...</p>
+            </div>
+        </section>
+
+        <section class="dashboard-section">
+            <h3>Real-Time Content Breakdown</h3>
+            <div class="chart-container">
+                <canvas id="contentChart" width="400" height="200"></canvas>
+            </div>
+            <div id="contentCategoriesContainer">
+                <p style="text-align: center; color: #666;">Loading content categories...</p>
+            </div>
+        </section>
+
+        <section class="dashboard-section">
+            <h3>Recently Analyzed Content</h3>
+            <div id="recentAnalysisContainer">
+                <p style="text-align: center; color: #666;">No content analyzed yet. Visit social media to see real-time analysis!</p>
+            </div>
+        </section>
+
+        <section class="dashboard-section">
+            <h3>Content Filtering & Goals</h3>
+            <div class="goals-section">
+                <div class="add-goal">
+                    <input type="text" id="contentGoalInput" placeholder="Add learning goal (e.g., English, Coding...)" maxlength="50">
+                    <button id="addContentGoalBtn">Add Goal</button>
                 </div>
-                <div class="platform-card">
-                    <div class="platform-icon">📺</div>
-                    <h4>YouTube</h4>
-                    <p>1.8 hrs today</p>
-                    <div class="usage-bar"><div class="usage-fill" style="width: 60%"></div></div>
-                </div>
-                <div class="platform-card">
-                    <div class="platform-icon">📘</div>
-                    <h4>Facebook</h4>
-                    <p>0.5 hrs today</p>
-                    <div class="usage-bar"><div class="usage-fill" style="width: 20%"></div></div>
+                <div id="contentGoalsContainer">
+                    <p style="text-align: center; color: #666;">Add goals to filter content based on your interests!</p>
                 </div>
             </div>
         </section>
 
         <section class="dashboard-section">
-            <h3>Content Categories</h3>
-            <div class="content-categories">
-                <div class="category-item positive">
-                    <span class="category-icon">🌟</span>
-                    <div class="category-info">
-                        <h4>Motivational</h4>
-                        <p>45% of your feed</p>
+            <h3>Content Quality Metrics</h3>
+            <div id="qualityMetricsContainer">
+                <div class="metrics-grid">
+                    <div class="metric-card positive">
+                        <span class="metric-icon">🌟</span>
+                        <div class="metric-info">
+                            <h4>Positive Content</h4>
+                            <p id="positiveMetric">Loading...</p>
+                        </div>
                     </div>
-                </div>
-                <div class="category-item neutral">
-                    <span class="category-icon">📰</span>
-                    <div class="category-info">
-                        <h4>News</h4>
-                        <p>25% of your feed</p>
+                    <div class="metric-card negative">
+                        <span class="metric-icon">😔</span>
+                        <div class="metric-info">
+                            <h4>Negative Content</h4>
+                            <p id="negativeMetric">Loading...</p>
+                        </div>
                     </div>
-                </div>
-                <div class="category-item negative">
-                    <span class="category-icon">😔</span>
-                    <div class="category-info">
-                        <h4>Negative</h4>
-                        <p>20% of your feed</p>
+                    <div class="metric-card toxic">
+                        <span class="metric-icon">⚠️</span>
+                        <div class="metric-info">
+                            <h4>Toxic Content</h4>
+                            <p id="toxicMetric">Loading...</p>
+                        </div>
                     </div>
-                </div>
-                <div class="category-item toxic">
-                    <span class="category-icon">⚠️</span>
-                    <div class="category-info">
-                        <h4>Toxic</h4>
-                        <p>10% of your feed</p>
+                    <div class="metric-card neutral">
+                        <span class="metric-icon">📰</span>
+                        <div class="metric-info">
+                            <h4>Neutral Content</h4>
+                            <p id="neutralMetric">Loading...</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -102,10 +117,6 @@
     </main>
 
     <script src="navigation.js"></script>
-    <script>
-        document.getElementById('backBtn').addEventListener('click', () => {
-            window.location.href = 'dashboard.html';
-        });
-    </script>
+    <script src="content.js"></script>
 </body>
 </html>
