@@ -17,13 +17,26 @@
         <div class="om-symbol">ॐ</div>
     </div>
 
+    <!-- Navigation Bar -->
+    <nav class="dashboard-navbar">
+        <div class="navbar-content">
+            <div class="navbar-left">
+                <button class="nav-item back-btn" id="backBtn"><span>←</span></button>
+                <span class="navbar-brand"><span class="brand-icon">🛡️</span> ManoRakshak</span>
+            </div>
+            <div class="navbar-right">
+                <button class="nav-item" data-tab="content">Content</button>
+                <button class="nav-item" data-tab="analyse">Analyse</button>
+                <button class="nav-item" data-tab="signup" id="signupNavBtn">Signup</button>
+                <button class="nav-item" data-tab="login">Login</button>
+            </div>
+        </div>
+    </nav>
+
     <!-- Header / Welcome Section -->
     <header class="dashboard-header">
         <div class="header-content">
             <div class="header-ornament">🕉️</div>
-            <div class="back-btn" id="backBtn">
-                <span>←</span> Back to Extension
-            </div>
             <h1>Welcome to Your Dashboard</h1>
             <div class="user-greeting">
                 <h2 id="userGreeting">Hi User 🙏</h2>
@@ -31,16 +44,6 @@
             </div>
         </div>
     </header>
-
-    <!-- Navigation Bar -->
-    <nav class="dashboard-navbar">
-        <div class="navbar-content">
-            <button class="nav-item" data-tab="content">Content</button>
-            <button class="nav-item" data-tab="analyse">Analyse</button>
-            <button class="nav-item" data-tab="signup" id="signupNavBtn">Signup</button>
-            <button class="nav-item" data-tab="login">Login</button>
-        </div>
-    </nav>
 
     <!-- Chakra Background -->
     <div class="chakra-background">
@@ -272,9 +275,7 @@
                     <span class="calm-label">Enable Sacred Peace</span>
                     <label class="toggle">
                         <input type="checkbox" id="dashboardCalmToggle" />
-                        <span class="slider">
-                            <span class="lotus-icon">🪷</span>
-                        </span>
+                        <span class="slider"></span>
                     </label>
                 </div>
                 <div class="calm-suggestions" id="calmSuggestions">
@@ -404,7 +405,7 @@
         <!-- Achievements Section -->
         <section class="dashboard-section achievements-section">
             <h3>🏆 Sacred Achievements</h3>
-            <div class="achievements-container" id="achievementsContainer">
+            <div class="achievements-container horizontal" id="achievementsContainer">
                 <div class="achievement-badge earned">
                     <span class="achievement-icon">🧘‍♀️</span>
                     <div class="achievement-title">Mindful Navigator</div>
