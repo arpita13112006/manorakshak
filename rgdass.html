@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manorakshak - User Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="chart.min.js"></script>
+</head>
+<body>
+    <!-- Header / Welcome Section -->
+    <header class="dashboard-header">
+        <div class="header-content">
+            <div class="back-btn" id="backBtn">
+                <span>←</span> Back to Extension
+            </div>
+            <h1>Welcome to Your Dashboard</h1>
+            <div class="user-greeting">
+                <h2 id="userGreeting">Hi User 👋</h2>
+                <p id="dailyStatus">Loading your daily mental wellbeing status...</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav class="dashboard-navbar">
+        <div class="navbar-content">
+            <!-- <button class="nav-item active" data-tab="dashboard">Dashboard</button> -->
+            <button class="nav-item" data-tab="content">Content</button>
+            <button class="nav-item" data-tab="analyse">Analyse</button>
+            <button class="nav-item" data-tab="signup" id="signupNavBtn">Signup</button>
+            <button class="nav-item" data-tab="login">Login</button>
+            
+        </div>
+    </nav>
+
+    <!-- Chakra Background -->
+    <div class="chakra-background">
+        <div class="chakra"></div>
+        <div class="chakra"></div>
+        <div class="chakra"></div>
+        <div class="chakra"></div>
+        <div class="chakra"></div>
+        <div class="chakra"></div>
+        <div class="chakra"></div>
+    </div>
+
+    <!-- Mandala Background -->
+    <div class="mandala-bg">
+        <svg class="mandala-corner top-left" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="80" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.3"/>
+            <circle cx="100" cy="100" r="60" fill="none" stroke="#FF9933" stroke-width="1" opacity="0.2"/>
+            <circle cx="100" cy="100" r="40" fill="none" stroke="#800000" stroke-width="1" opacity="0.1"/>
+            <path d="M100,20 L110,50 L140,50 L118,68 L128,98 L100,80 L72,98 L82,68 L60,50 L90,50 Z" fill="#FFD700" opacity="0.1"/>
+        </svg>
+        <svg class="mandala-corner top-right" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="80" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.3"/>
+            <circle cx="100" cy="100" r="60" fill="none" stroke="#FF9933" stroke-width="1" opacity="0.2"/>
+            <circle cx="100" cy="100" r="40" fill="none" stroke="#800000" stroke-width="1" opacity="0.1"/>
+            <path d="M100,20 L110,50 L140,50 L118,68 L128,98 L100,80 L72,98 L82,68 L60,50 L90,50 Z" fill="#FFD700" opacity="0.1"/>
+        </svg>
+        <svg class="mandala-corner bottom-left" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="80" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.3"/>
+            <circle cx="100" cy="100" r="60" fill="none" stroke="#FF9933" stroke-width="1" opacity="0.2"/>
+            <circle cx="100" cy="100" r="40" fill="none" stroke="#800000" stroke-width="1" opacity="0.1"/>
+            <path d="M100,20 L110,50 L140,50 L118,68 L128,98 L100,80 L72,98 L82,68 L60,50 L90,50 Z" fill="#FFD700" opacity="0.1"/>
+        </svg>
+        <svg class="mandala-corner bottom-right" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="80" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.3"/>
+            <circle cx="100" cy="100" r="60" fill="none" stroke="#FF9933" stroke-width="1" opacity="0.2"/>
+            <circle cx="100" cy="100" r="40" fill="none" stroke="#800000" stroke-width="1" opacity="0.1"/>
+            <path d="M100,20 L110,50 L140,50 L118,68 L128,98 L100,80 L72,98 L82,68 L60,50 L90,50 Z" fill="#FFD700" opacity="0.1"/>
+        </svg>
+    </div>
+
+    <!-- Main Dashboard Content -->
+    <main class="dashboard-main">
+        <!-- Mood Score Overview -->
+        <section class="dashboard-section mood-score-section">
+            <h3>Today's Mental Wellbeing Score</h3>
+            <div class="mood-score-container">
+                <div class="sunflower-progress">
+                    <div class="sunflower-wrap">
+                        <svg class="petals" viewBox="0 0 200 200" aria-hidden="true">
+                            <g fill="#F7C948" opacity="0.9" stroke="#E9B323" stroke-width="1.5">
+                                <defs>
+                                    <path id="petal" d="M100,22 C110,45 110,65 100,78 C90,65 90,45 100,22 Z"></path>
+                                </defs>
+                                <use href="#petal" transform="rotate(0 100 100)"></use>
+                                <use href="#petal" transform="rotate(30 100 100)"></use>
+                                <use href="#petal" transform="rotate(60 100 100)"></use>
+                                <use href="#petal" transform="rotate(90 100 100)"></use>
+                                <use href="#petal" transform="rotate(120 100 100)"></use>
+                                <use href="#petal" transform="rotate(150 100 100)"></use>
+                                <use href="#petal" transform="rotate(180 100 100)"></use>
+                                <use href="#petal" transform="rotate(210 100 100)"></use>
+                                <use href="#petal" transform="rotate(240 100 100)"></use>
+                                <use href="#petal" transform="rotate(270 100 100)"></use>
+                                <use href="#petal" transform="rotate(300 100 100)"></use>
+                                <use href="#petal" transform="rotate(330 100 100)"></use>
+                            </g>
+                        </svg>
+                        <div class="ring">
+                            <div id="dashboardRingFill" class="ring-fill" style="--p:60"></div>
+                            <div class="ring-center">
+                                <span id="dashboardPercentText">60%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="score-breakdown">
+                    <div class="score-item positive">
+                        <span class="score-label">Positive</span>
+                        <span class="score-value" id="positiveScore">60%</span>
+                    </div>
+                    <div class="score-item negative">
+                        <span class="score-label">Negative</span>
+                        <span class="score-value" id="negativeScore">40%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trend Graph -->
+        <section class="dashboard-section trend-section">
+            <h3>Sentiment Trends (Last 7 Days)</h3>
+            <div class="chart-container">
+                <canvas id="trendChart" width="400" height="200"></canvas>
+            </div>
+        </section>
+
+        <!-- Content Type Breakdown -->
+        <section class="dashboard-section content-breakdown-section">
+            <h3>Content Type Analysis</h3>
+            <div class="charts-row">
+                <div class="chart-container">
+                    <canvas id="contentPieChart" width="200" height="200"></canvas>
+                </div>
+                <div class="content-legend">
+                    <div class="legend-item">
+                        <span class="legend-color green"></span>
+                        <span>Uplifting/Motivational</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color red"></span>
+                        <span>Negative/Sad</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color yellow"></span>
+                        <span>Neutral</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color orange"></span>
+                        <span>Toxic Content</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Alerts & Warnings Log -->
+        <section class="dashboard-section alerts-section">
+            <h3>Recent Alerts & Warnings</h3>
+            <div class="alerts-container" id="alertsContainer">
+                <!-- Alerts will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Calm Mode Section -->
+        <section class="dashboard-section calm-mode-section">
+            <h3>Calm Mode</h3>
+            <div class="calm-mode-container">
+                <div class="calm-toggle-row">
+                    <span class="calm-label">Enable Calm Mode</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="dashboardCalmToggle" />
+                        <span class="slider">
+                            <span class="lotus-icon">🪷</span>
+                        </span>
+                    </label>
+                </div>
+                <div class="calm-suggestions" id="calmSuggestions">
+                    <!-- Suggestions will be shown when Calm Mode is enabled -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Goals Section -->
+        <section class="dashboard-section goals-section">
+            <h3>Your Learning Goals</h3>
+            <div class="goals-container">
+                <div class="add-goal">
+                    <input type="text" id="goalInput" placeholder="e.g., Learn English, Fitness, Coding..." maxlength="50">
+                    <button id="addGoalBtn">Add Goal</button>
+                </div>
+                <div id="goalsContainer">
+                    <!-- Goals will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Insights Section -->
+        <section class="dashboard-section insights-section">
+            <h3>Content Insights</h3>
+            <div id="insightsContainer">
+                <!-- Insights will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- AI Report Section -->
+        <section class="dashboard-section ai-report-section">
+            <h3>🤖 AI Mental Health Report</h3>
+            <div class="ai-controls">
+                <button id="generateReportBtn" class="ai-btn">Generate Report</button>
+                <button id="getSuggestionsBtn" class="ai-btn">Get Suggestions</button>
+            </div>
+            <div id="aiReportContainer">
+                <p style="text-align: center; color: #666;">Click "Generate Report" for AI-powered insights</p>
+            </div>
+        </section>
+
+        <!-- AI Suggestions Section -->
+        <section class="dashboard-section ai-suggestions-section">
+            <h3>💡 Personalized Suggestions</h3>
+            <div id="aiSuggestionsContainer">
+                <p style="text-align: center; color: #666;">AI suggestions will appear here</p>
+            </div>
+        </section>
+
+        <!-- Recent Content Analysis -->
+        <section class="dashboard-section recent-content-section">
+            <h3>Recently Analyzed Content</h3>
+            <div id="recentContentContainer">
+                <!-- Recent content will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Achievements Section -->
+        <section class="dashboard-section achievements-section">
+            <h3>Your Achievements</h3>
+            <div class="achievements-container" id="achievementsContainer">
+                <!-- Achievements will be populated by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+        <div class="footer-content">
+            <p class="motivation-text">You're building a healthier digital life 💚 Keep going!</p>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Mental Health Resources</a>
+                <a href="#" class="footer-link">Helpline Information</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="navigation.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

@@ -5,18 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manorakshak - User Dashboard</title>
     <link rel="stylesheet" href="dashboard.css">
-    <script src="chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 </head>
 <body>
+    <!-- Sacred Geometry Background -->
+    <div class="sacred-geometry-bg"></div>
+
+    <!-- Om Symbols -->
+    <div class="om-symbols">
+        <div class="om-symbol">ॐ</div>
+        <div class="om-symbol">ॐ</div>
+    </div>
+
     <!-- Header / Welcome Section -->
     <header class="dashboard-header">
         <div class="header-content">
+            <div class="header-ornament">🕉️</div>
             <div class="back-btn" id="backBtn">
                 <span>←</span> Back to Extension
             </div>
             <h1>Welcome to Your Dashboard</h1>
             <div class="user-greeting">
-                <h2 id="userGreeting">Hi User 👋</h2>
+                <h2 id="userGreeting">Hi User 🙏</h2>
                 <p id="dailyStatus">Loading your daily mental wellbeing status...</p>
             </div>
         </div>
@@ -25,12 +35,10 @@
     <!-- Navigation Bar -->
     <nav class="dashboard-navbar">
         <div class="navbar-content">
-            <!-- <button class="nav-item active" data-tab="dashboard">Dashboard</button> -->
             <button class="nav-item" data-tab="content">Content</button>
             <button class="nav-item" data-tab="analyse">Analyse</button>
             <button class="nav-item" data-tab="signup" id="signupNavBtn">Signup</button>
             <button class="nav-item" data-tab="login">Login</button>
-            
         </div>
     </nav>
 
@@ -47,29 +55,105 @@
 
     <!-- Mandala Background -->
     <div class="mandala-bg">
-        <svg class="mandala-corner top-left" viewBox="0 0 200 200">
-            <circle cx="100" cy="100" r="80" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.3"/>
-            <circle cx="100" cy="100" r="60" fill="none" stroke="#FF9933" stroke-width="1" opacity="0.2"/>
-            <circle cx="100" cy="100" r="40" fill="none" stroke="#800000" stroke-width="1" opacity="0.1"/>
-            <path d="M100,20 L110,50 L140,50 L118,68 L128,98 L100,80 L72,98 L82,68 L60,50 L90,50 Z" fill="#FFD700" opacity="0.1"/>
+        <svg class="mandala-corner top-left" viewBox="0 0 300 300">
+            <defs>
+                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#FF9933;stop-opacity:0.8" />
+                    <stop offset="100%" style="stop-color:#DC143C;stop-opacity:0.6" />
+                </linearGradient>
+            </defs>
+            <g fill="none" stroke="url(#grad1)" stroke-width="2">
+                <circle cx="150" cy="150" r="140"/>
+                <circle cx="150" cy="150" r="110"/>
+                <circle cx="150" cy="150" r="80"/>
+                <circle cx="150" cy="150" r="50"/>
+                <circle cx="150" cy="150" r="25"/>
+            </g>
+            <g fill="url(#grad1)" opacity="0.3">
+                <path d="M150,10 L160,60 L210,60 L178,88 L188,138 L150,110 L112,138 L122,88 L90,60 L140,60 Z"/>
+                <path d="M150,40 L155,75 L190,75 L168,93 L173,128 L150,110 L127,128 L132,93 L110,75 L145,75 Z"/>
+            </g>
         </svg>
-        <svg class="mandala-corner top-right" viewBox="0 0 200 200">
-            <circle cx="100" cy="100" r="80" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.3"/>
-            <circle cx="100" cy="100" r="60" fill="none" stroke="#FF9933" stroke-width="1" opacity="0.2"/>
-            <circle cx="100" cy="100" r="40" fill="none" stroke="#800000" stroke-width="1" opacity="0.1"/>
-            <path d="M100,20 L110,50 L140,50 L118,68 L128,98 L100,80 L72,98 L82,68 L60,50 L90,50 Z" fill="#FFD700" opacity="0.1"/>
+
+        <svg class="mandala-corner top-right" viewBox="0 0 300 300">
+            <defs>
+                <radialGradient id="grad2" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" style="stop-color:#FFD700;stop-opacity:0.8" />
+                    <stop offset="50%" style="stop-color:#FF9933;stop-opacity:0.6" />
+                    <stop offset="100%" style="stop-color:#DC143C;stop-opacity:0.4" />
+                </radialGradient>
+            </defs>
+            <g fill="none" stroke="url(#grad2)" stroke-width="2">
+                <circle cx="150" cy="150" r="120"/>
+                <circle cx="150" cy="150" r="90"/>
+                <circle cx="150" cy="150" r="60"/>
+                <circle cx="150" cy="150" r="30"/>
+            </g>
+            <g fill="url(#grad2)" opacity="0.4">
+                <path d="M150,30 L165,80 L220,80 L185,115 L200,170 L150,140 L100,170 L115,115 L80,80 L135,80 Z"/>
+            </g>
         </svg>
-        <svg class="mandala-corner bottom-left" viewBox="0 0 200 200">
-            <circle cx="100" cy="100" r="80" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.3"/>
-            <circle cx="100" cy="100" r="60" fill="none" stroke="#FF9933" stroke-width="1" opacity="0.2"/>
-            <circle cx="100" cy="100" r="40" fill="none" stroke="#800000" stroke-width="1" opacity="0.1"/>
-            <path d="M100,20 L110,50 L140,50 L118,68 L128,98 L100,80 L72,98 L82,68 L60,50 L90,50 Z" fill="#FFD700" opacity="0.1"/>
+
+        <svg class="mandala-corner bottom-left" viewBox="0 0 300 300">
+            <defs>
+                <linearGradient id="grad3" x1="100%" y1="100%" x2="0%" y2="0%">
+                    <stop offset="0%" style="stop-color:#9400D3;stop-opacity:0.7" />
+                    <stop offset="50%" style="stop-color:#4B0082;stop-opacity:0.5" />
+                    <stop offset="100%" style="stop-color:#00BFFF;stop-opacity:0.3" />
+                </linearGradient>
+            </defs>
+            <g fill="none" stroke="url(#grad3)" stroke-width="1.5">
+                <circle cx="150" cy="150" r="130"/>
+                <circle cx="150" cy="150" r="100"/>
+                <circle cx="150" cy="150" r="70"/>
+            </g>
+            <g fill="url(#grad3)" opacity="0.2">
+                <path d="M150,50 L170,100 L230,100 L190,135 L210,190 L150,160 L90,190 L110,135 L70,100 L130,100 Z"/>
+            </g>
         </svg>
-        <svg class="mandala-corner bottom-right" viewBox="0 0 200 200">
-            <circle cx="100" cy="100" r="80" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.3"/>
-            <circle cx="100" cy="100" r="60" fill="none" stroke="#FF9933" stroke-width="1" opacity="0.2"/>
-            <circle cx="100" cy="100" r="40" fill="none" stroke="#800000" stroke-width="1" opacity="0.1"/>
-            <path d="M100,20 L110,50 L140,50 L118,68 L128,98 L100,80 L72,98 L82,68 L60,50 L90,50 Z" fill="#FFD700" opacity="0.1"/>
+
+        <svg class="mandala-corner bottom-right" viewBox="0 0 300 300">
+            <defs>
+                <radialGradient id="grad4" cx="50%" cy="50%" r="70%">
+                    <stop offset="0%" style="stop-color:#32CD32;stop-opacity:0.6" />
+                    <stop offset="50%" style="stop-color:#FFD700;stop-opacity:0.4" />
+                    <stop offset="100%" style="stop-color:#FF8C00;stop-opacity:0.2" />
+                </radialGradient>
+            </defs>
+            <g fill="none" stroke="url(#grad4)" stroke-width="2">
+                <circle cx="150" cy="150" r="125"/>
+                <circle cx="150" cy="150" r="95"/>
+                <circle cx="150" cy="150" r="65"/>
+                <circle cx="150" cy="150" r="35"/>
+            </g>
+            <g fill="url(#grad4)" opacity="0.3">
+                <path d="M150,25 L175,85 L240,85 L200,125 L225,185 L150,150 L75,185 L100,125 L60,85 L125,85 Z"/>
+            </g>
+        </svg>
+
+        <svg class="mandala-center" viewBox="0 0 300 300">
+            <defs>
+                <radialGradient id="centerGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+                    <stop offset="30%" style="stop-color:#FF9933;stop-opacity:0.8" />
+                    <stop offset="60%" style="stop-color:#DC143C;stop-opacity:0.6" />
+                    <stop offset="100%" style="stop-color:#4B0082;stop-opacity:0.4" />
+                </radialGradient>
+            </defs>
+            <g fill="none" stroke="url(#centerGrad)" stroke-width="1">
+                <circle cx="150" cy="150" r="140"/>
+                <circle cx="150" cy="150" r="120"/>
+                <circle cx="150" cy="150" r="100"/>
+                <circle cx="150" cy="150" r="80"/>
+                <circle cx="150" cy="150" r="60"/>
+                <circle cx="150" cy="150" r="40"/>
+                <circle cx="150" cy="150" r="20"/>
+            </g>
+            <g fill="url(#centerGrad)" opacity="0.1">
+                <path d="M150,10 L170,70 L240,70 L190,110 L210,180 L150,140 L90,180 L110,110 L60,70 L130,70 Z"/>
+                <path d="M150,50 L160,90 L200,90 L175,115 L185,155 L150,135 L115,155 L125,115 L100,90 L140,90 Z"/>
+            </g>
         </svg>
     </div>
 
@@ -82,10 +166,15 @@
                 <div class="sunflower-progress">
                     <div class="sunflower-wrap">
                         <svg class="petals" viewBox="0 0 200 200" aria-hidden="true">
-                            <g fill="#F7C948" opacity="0.9" stroke="#E9B323" stroke-width="1.5">
-                                <defs>
-                                    <path id="petal" d="M100,22 C110,45 110,65 100,78 C90,65 90,45 100,22 Z"></path>
-                                </defs>
+                            <defs>
+                                <linearGradient id="petalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#F7C948;stop-opacity:1" />
+                                    <stop offset="50%" style="stop-color:#E9B323;stop-opacity:0.9" />
+                                    <stop offset="100%" style="stop-color:#D4A017;stop-opacity:0.8" />
+                                </linearGradient>
+                                <path id="petal" d="M100,20 C115,40 115,60 100,80 C85,60 85,40 100,20 Z"></path>
+                            </defs>
+                            <g fill="url(#petalGrad)" stroke="#D4A017" stroke-width="1">
                                 <use href="#petal" transform="rotate(0 100 100)"></use>
                                 <use href="#petal" transform="rotate(30 100 100)"></use>
                                 <use href="#petal" transform="rotate(60 100 100)"></use>
@@ -100,22 +189,21 @@
                                 <use href="#petal" transform="rotate(330 100 100)"></use>
                             </g>
                         </svg>
-                        <div class="ring">
-                            <div id="dashboardRingFill" class="ring-fill" style="--p:60"></div>
+                        <div class="ring" style="--p:75">
                             <div class="ring-center">
-                                <span id="dashboardPercentText">60%</span>
+                                <span id="dashboardPercentText">75%</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="score-breakdown">
                     <div class="score-item positive">
-                        <span class="score-label">Positive</span>
-                        <span class="score-value" id="positiveScore">60%</span>
+                        <span class="score-label">✨ Positive Vibes</span>
+                        <span class="score-value" id="positiveScore">75%</span>
                     </div>
                     <div class="score-item negative">
-                        <span class="score-label">Negative</span>
-                        <span class="score-value" id="negativeScore">40%</span>
+                        <span class="score-label">⚠️ Areas to Focus</span>
+                        <span class="score-value" id="negativeScore">25%</span>
                     </div>
                 </div>
             </div>
@@ -123,35 +211,35 @@
 
         <!-- Trend Graph -->
         <section class="dashboard-section trend-section">
-            <h3>Sentiment Trends (Last 7 Days)</h3>
+            <h3>🌅 Emotional Journey (Last 7 Days)</h3>
             <div class="chart-container">
-                <canvas id="trendChart" width="400" height="200"></canvas>
+                <canvas id="trendChart" width="400" height="250"></canvas>
             </div>
         </section>
 
         <!-- Content Type Breakdown -->
         <section class="dashboard-section content-breakdown-section">
-            <h3>Content Type Analysis</h3>
+            <h3>🎭 Content Sentiment Analysis</h3>
             <div class="charts-row">
                 <div class="chart-container">
-                    <canvas id="contentPieChart" width="200" height="200"></canvas>
+                    <canvas id="contentPieChart" width="280" height="280"></canvas>
                 </div>
                 <div class="content-legend">
                     <div class="legend-item">
                         <span class="legend-color green"></span>
-                        <span>Uplifting/Motivational</span>
+                        <span>🌸 Uplifting Content</span>
                     </div>
                     <div class="legend-item">
                         <span class="legend-color red"></span>
-                        <span>Negative/Sad</span>
+                        <span>🌧️ Challenging Content</span>
                     </div>
                     <div class="legend-item">
                         <span class="legend-color yellow"></span>
-                        <span>Neutral</span>
+                        <span>⚖️ Neutral Content</span>
                     </div>
                     <div class="legend-item">
                         <span class="legend-color orange"></span>
-                        <span>Toxic Content</span>
+                        <span>⚡ Intense Content</span>
                     </div>
                 </div>
             </div>
@@ -159,18 +247,29 @@
 
         <!-- Alerts & Warnings Log -->
         <section class="dashboard-section alerts-section">
-            <h3>Recent Alerts & Warnings</h3>
+            <h3>🔔 Mindfulness Alerts</h3>
             <div class="alerts-container" id="alertsContainer">
-                <!-- Alerts will be populated by JavaScript -->
+                <div class="alert-item info">
+                    <div class="alert-time">🕐 2 hours ago</div>
+                    <div class="alert-message">Great progress! You've maintained positive engagement for 3 hours.</div>
+                </div>
+                <div class="alert-item warning">
+                    <div class="alert-time">🕕 4 hours ago</div>
+                    <div class="alert-message">Consider taking a mindful break. You've been consuming challenging content.</div>
+                </div>
+                <div class="alert-item critical">
+                    <div class="alert-time">🕘 6 hours ago</div>
+                    <div class="alert-message">High negativity detected. Calm Mode was automatically activated.</div>
+                </div>
             </div>
         </section>
 
         <!-- Calm Mode Section -->
         <section class="dashboard-section calm-mode-section">
-            <h3>Calm Mode</h3>
+            <h3>🧘‍♀️ Sacred Calm Mode</h3>
             <div class="calm-mode-container">
                 <div class="calm-toggle-row">
-                    <span class="calm-label">Enable Calm Mode</span>
+                    <span class="calm-label">Enable Sacred Peace</span>
                     <label class="toggle">
                         <input type="checkbox" id="dashboardCalmToggle" />
                         <span class="slider">
@@ -179,66 +278,163 @@
                     </label>
                 </div>
                 <div class="calm-suggestions" id="calmSuggestions">
-                    <!-- Suggestions will be shown when Calm Mode is enabled -->
+                    <div class="suggestion-item">
+                        <span class="suggestion-icon">🧘‍♀️</span>
+                        <strong>Pranayama Practice:</strong> Take 5 deep breaths with the 4-7-8 technique for instant calm.
+                    </div>
+                    <div class="suggestion-item">
+                        <span class="suggestion-icon">🎵</span>
+                        <strong>Sacred Sounds:</strong> Listen to calming mantras or nature sounds for 10 minutes.
+                    </div>
+                    <div class="suggestion-item">
+                        <span class="suggestion-icon">🌿</span>
+                        <strong>Digital Detox:</strong> Step away from screens and connect with nature or loved ones.
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Goals Section -->
         <section class="dashboard-section goals-section">
-            <h3>Your Learning Goals</h3>
+            <h3>🎯 Sacred Intentions & Goals</h3>
             <div class="goals-container">
                 <div class="add-goal">
-                    <input type="text" id="goalInput" placeholder="e.g., Learn English, Fitness, Coding..." maxlength="50">
-                    <button id="addGoalBtn">Add Goal</button>
+                    <input type="text" id="goalInput" placeholder="Set a mindful intention (e.g., Daily meditation, Positive reading...)" maxlength="60">
+                    <button id="addGoalBtn">✨ Manifest</button>
                 </div>
                 <div id="goalsContainer">
-                    <!-- Goals will be populated by JavaScript -->
+                    <div class="goal-item">
+                        <span class="goal-text">🧘 Daily 10-minute meditation practice</span>
+                        <span class="goal-date">Set on: Today</span>
+                    </div>
+                    <div class="goal-item">
+                        <span class="goal-text">📚 Read one uplifting article daily</span>
+                        <span class="goal-date">Set on: Yesterday</span>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Insights Section -->
         <section class="dashboard-section insights-section">
-            <h3>Content Insights</h3>
+            <h3>🔮 Wisdom Insights</h3>
             <div id="insightsContainer">
-                <!-- Insights will be populated by JavaScript -->
+                <div class="insight-item positive">
+                    <span class="insight-icon">🌟</span>
+                    <div>
+                        <strong>Positive Pattern:</strong> You show great resilience! Your mood recovers quickly after challenges.
+                    </div>
+                </div>
+                <div class="insight-item warning">
+                    <span class="insight-icon">⚖️</span>
+                    <div>
+                        <strong>Balance Needed:</strong> Consider mixing more uplifting content with news consumption.
+                    </div>
+                </div>
+                <div class="insight-item suggestion">
+                    <span class="insight-icon">💡</span>
+                    <div>
+                        <strong>Sacred Suggestion:</strong> Your peak positive hours are 9-11 AM. Schedule important activities then.
+                    </div>
+                </div>
             </div>
         </section>
 
         <!-- AI Report Section -->
         <section class="dashboard-section ai-report-section">
-            <h3>🤖 AI Mental Health Report</h3>
+            <h3>🤖 AI Wellness Oracle</h3>
             <div class="ai-controls">
-                <button id="generateReportBtn" class="ai-btn">Generate Report</button>
-                <button id="getSuggestionsBtn" class="ai-btn">Get Suggestions</button>
+                <button id="generateReportBtn" class="ai-btn">🔮 Generate Wisdom</button>
+                <button id="getSuggestionsBtn" class="ai-btn">💫 Get Guidance</button>
             </div>
             <div id="aiReportContainer">
-                <p style="text-align: center; color: #666;">Click "Generate Report" for AI-powered insights</p>
+                <div class="ai-report">
+                    <p>🙏 Welcome to your sacred digital wellness space. Your AI Oracle is ready to provide personalized insights based on your digital consumption patterns and emotional journey.</p>
+                    <p><em>Click "Generate Wisdom" to receive your personalized mental wellness analysis.</em></p>
+                </div>
             </div>
         </section>
 
         <!-- AI Suggestions Section -->
         <section class="dashboard-section ai-suggestions-section">
-            <h3>💡 Personalized Suggestions</h3>
+            <h3>💡 Divine Guidance</h3>
             <div id="aiSuggestionsContainer">
-                <p style="text-align: center; color: #666;">AI suggestions will appear here</p>
+                <div class="suggestion-card">
+                    <h4>🌅 Morning Ritual</h4>
+                    <p>Start your day with 5 minutes of gratitude journaling to set a positive tone for your digital interactions.</p>
+                </div>
+                <div class="suggestion-card">
+                    <h4>🌙 Evening Reflection</h4>
+                    <p>End your day by reviewing 3 positive moments from your online experiences to reinforce good memories.</p>
+                </div>
             </div>
         </section>
 
         <!-- Recent Content Analysis -->
         <section class="dashboard-section recent-content-section">
-            <h3>Recently Analyzed Content</h3>
+            <h3>📱 Recent Digital Encounters</h3>
             <div id="recentContentContainer">
-                <!-- Recent content will be populated by JavaScript -->
+                <div class="content-item positive">
+                    <div class="content-text">"Inspiring story about community helping each other during difficult times..."</div>
+                    <div class="content-meta">
+                        <span class="sentiment-badge positive">Uplifting</span>
+                        <span>📍 Social Media</span>
+                        <span>⏰ 2 hours ago</span>
+                    </div>
+                </div>
+                <div class="content-item negative">
+                    <div class="content-text">"Breaking news about concerning global developments..."</div>
+                    <div class="content-meta">
+                        <span class="sentiment-badge negative">Challenging</span>
+                        <span>📍 News Site</span>
+                        <span>⏰ 4 hours ago</span>
+                    </div>
+                </div>
+                <div class="content-item toxic">
+                    <div class="content-text">"Heated argument thread with aggressive language..."</div>
+                    <div class="content-meta">
+                        <span class="sentiment-badge toxic">Intense</span>
+                        <span>📍 Forum</span>
+                        <span>⏰ 6 hours ago</span>
+                    </div>
+                </div>
             </div>
         </section>
 
         <!-- Achievements Section -->
         <section class="dashboard-section achievements-section">
-            <h3>Your Achievements</h3>
+            <h3>🏆 Sacred Achievements</h3>
             <div class="achievements-container" id="achievementsContainer">
-                <!-- Achievements will be populated by JavaScript -->
+                <div class="achievement-badge earned">
+                    <span class="achievement-icon">🧘‍♀️</span>
+                    <div class="achievement-title">Mindful Navigator</div>
+                    <div class="achievement-desc">Maintained positive engagement for 7 consecutive days</div>
+                </div>
+                <div class="achievement-badge earned">
+                    <span class="achievement-icon">🌅</span>
+                    <div class="achievement-title">Dawn Warrior</div>
+                    <div class="achievement-desc">Started 5 days with positive content consumption</div>
+                </div>
+                <div class="achievement-badge locked">
+                    <span class="achievement-icon">🌙</span>
+                    <div class="achievement-title">Twilight Sage</div>
+                    <div class="achievement-desc">End 10 days with calm, peaceful content</div>
+                </div>
+                <div class="achievement-badge earned">
+                    <span class="achievement-icon">⚖️</span>
+                    <div class="achievement-title">Balance Master</div>
+                    <div class="achievement-desc">Achieved emotional equilibrium for 3 days</div>
+                </div>
+                <div class="achievement-badge locked">
+                    <span class="achievement-icon">🔮</span>
+                    <div class="achievement-title">Digital Oracle</div>
+                    <div class="achievement-desc">Complete 30 days of mindful digital living</div>
+                </div>
+                <div class="achievement-badge locked">
+                    <span class="achievement-icon">🕉️</span>
+                    <div class="achievement-title">Sacred Guardian</div>
+                    <div class="achievement-desc">Help 5 others improve their digital wellness</div>
+                </div>
             </div>
         </section>
     </main>
@@ -246,15 +442,11 @@
     <!-- Footer -->
     <footer class="dashboard-footer">
         <div class="footer-content">
-            <p class="motivation-text">You're building a healthier digital life 💚 Keep going!</p>
+            <p class="motivation-text">🙏 Your journey to digital enlightenment continues with each mindful click 🌟</p>
             <div class="footer-links">
-                <a href="#" class="footer-link">Mental Health Resources</a>
-                <a href="#" class="footer-link">Helpline Information</a>
+                <a href="#" class="footer-link">🧘‍♀️ Meditation Resources</a>
+                <a href="#" class="footer-link">📞 Wellness Helpline</a>
+                <a href="#" class="footer-link">🌿 Mindfulness Practices</a>
             </div>
         </div>
     </footer>
-
-    <script src="navigation.js"></script>
-    <script src="dashboard.js"></script>
-</body>
-</html>
