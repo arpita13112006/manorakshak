@@ -1,23 +1,33 @@
 // Shared Navigation Script
 function setupNavigation() {
-    document.querySelectorAll('.nav-item').forEach(item => {
+    const navItems = document.querySelectorAll('.nav-item');
+    console.log('Found nav items:', navItems.length);
+    
+    navItems.forEach(item => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
-            const tab = item.dataset.tab;
+            e.stopPropagation();
             
-            switch(tab) {
-                case 'dashboard':
-                    window.location.href = 'dashboard.html';
-                    break;
-                case 'content':
-                    window.location.href = 'content.html';
-                    break;
-                case 'analyse':
-                    window.location.href = 'analyse.html';
-                    break;
-                case 'login':
-                    window.location.href = 'login.html';
-                    break;
+            const tab = item.dataset.tab;
+            console.log('Clicked tab:', tab);
+            
+            if (tab) {
+                switch(tab) {
+                    case 'dashboard':
+                        window.location.href = 'dashboard.html';
+                        break;
+                    case 'content':
+                        window.location.href = 'content.html';
+                        break;
+                    case 'analyse':
+                        window.location.href = 'analyse.html';
+                        break;
+                    case 'login':
+                        window.location.href = 'login.html';
+                        break;
+                    default:
+                        console.log('Unknown tab:', tab);
+                }
             }
         });
     });
