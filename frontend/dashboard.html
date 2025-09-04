@@ -5,36 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manorakshak - User Dashboard</title>
     <link rel="stylesheet" href="dashboard.css">
+    <style>
+         body {
+            background-image: url("design.jpg");
+            background-size: cover; /* image ko full screen fit karega */
+            background-repeat: no-repeat; /* repeat nahi hoga */
+            background-position: center; /* center me rahega */
+            background-attachment: fixed; /* smooth scrolling ke liye */
+        }
+    </style> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="navigation.js"></script>
     <script src="dashboard.js"></script>
 </head>
 <body>
-    <div class="animated-bg"></div>
-    <!-- Sacred Geometry Background -->
-    <div class="sacred-geometry-bg"></div>
-
-    <!-- Om Symbols -->
-    <div class="om-symbols">
-        <div class="om-symbol">ॐ</div>
-        <div class="om-symbol">ॐ</div>
-    </div>
 
     <!-- Navigation Bar -->
-    <nav class="dashboard-navbar">
+    <nav class="dashboard-navbar ancient-navbar">
         <div class="navbar-content">
             <div class="navbar-left">
                 <span class="navbar-logo">🪔</span>
-                <button class="nav-item back-btn" id="backBtn"><span>←</span></button>
-                <span class="navbar-brand"><span class="brand-icon">🛡️</span> ManoRakshak</span>
+                <button class="nav-item back-btn ancient-btn" id="backBtn">
+                    <span class="btn-icon">←</span>
+                    <span class="btn-text">Back</span>
+                </button>
+                <span class="navbar-brand ancient-brand">
+                    <span class="brand-icon">🛡️</span> 
+                    <span class="brand-text">ManoRakshak</span>
+                </span>
             </div>
             <div class="navbar-right">
-                <button class="nav-item" data-tab="content">Content</button>
-                <button class="nav-item" data-tab="analyse">Analyse</button>
-                <button class="nav-item" data-tab="signup" id="signupNavBtn">Signup</button>
-                <button class="nav-item" data-tab="login">Login</button>
+                <button class="nav-item ancient-nav-btn" data-tab="content">
+                    <span class="nav-icon">📜</span>
+                    <span class="nav-text">Content</span>
+                    <div class="nav-ornament"></div>
+                </button>
+                <button class="nav-item ancient-nav-btn" data-tab="analyse">
+                    <span class="nav-icon">🔮</span>
+                    <span class="nav-text">Analyse</span>
+                    <div class="nav-ornament"></div>
+                </button>
+                <button class="nav-item ancient-nav-btn" data-tab="login">
+                    <span class="nav-icon">🔑</span>
+                    <span class="nav-text">Login</span>
+                    <div class="nav-ornament"></div>
+                </button>
             </div>
         </div>
+        <div class="navbar-border"></div>
     </nav>
 
     <!-- Header / Welcome Section -->
@@ -49,120 +67,7 @@
         </div>
     </header>
 
-    <!-- Chakra Background -->
-    <div class="chakra-background">
-        <div class="chakra"></div>
-        <div class="chakra"></div>
-        <div class="chakra"></div>
-        <div class="chakra"></div>
-        <div class="chakra"></div>
-        <div class="chakra"></div>
-        <div class="chakra"></div>
-    </div>
 
-    <!-- Mandala Background -->
-    <div class="mandala-bg">
-        <svg class="mandala-corner top-left" viewBox="0 0 300 300">
-            <defs>
-                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
-                    <stop offset="50%" style="stop-color:#FF9933;stop-opacity:0.8" />
-                    <stop offset="100%" style="stop-color:#DC143C;stop-opacity:0.6" />
-                </linearGradient>
-            </defs>
-            <g fill="none" stroke="url(#grad1)" stroke-width="2">
-                <circle cx="150" cy="150" r="140"/>
-                <circle cx="150" cy="150" r="110"/>
-                <circle cx="150" cy="150" r="80"/>
-                <circle cx="150" cy="150" r="50"/>
-                <circle cx="150" cy="150" r="25"/>
-            </g>
-            <g fill="url(#grad1)" opacity="0.3">
-                <path d="M150,10 L160,60 L210,60 L178,88 L188,138 L150,110 L112,138 L122,88 L90,60 L140,60 Z"/>
-                <path d="M150,40 L155,75 L190,75 L168,93 L173,128 L150,110 L127,128 L132,93 L110,75 L145,75 Z"/>
-            </g>
-        </svg>
-
-        <svg class="mandala-corner top-right" viewBox="0 0 300 300">
-            <defs>
-                <radialGradient id="grad2" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" style="stop-color:#FFD700;stop-opacity:0.8" />
-                    <stop offset="50%" style="stop-color:#FF9933;stop-opacity:0.6" />
-                    <stop offset="100%" style="stop-color:#DC143C;stop-opacity:0.4" />
-                </radialGradient>
-            </defs>
-            <g fill="none" stroke="url(#grad2)" stroke-width="2">
-                <circle cx="150" cy="150" r="120"/>
-                <circle cx="150" cy="150" r="90"/>
-                <circle cx="150" cy="150" r="60"/>
-                <circle cx="150" cy="150" r="30"/>
-            </g>
-            <g fill="url(#grad2)" opacity="0.4">
-                <path d="M150,30 L165,80 L220,80 L185,115 L200,170 L150,140 L100,170 L115,115 L80,80 L135,80 Z"/>
-            </g>
-        </svg>
-
-        <svg class="mandala-corner bottom-left" viewBox="0 0 300 300">
-            <defs>
-                <linearGradient id="grad3" x1="100%" y1="100%" x2="0%" y2="0%">
-                    <stop offset="0%" style="stop-color:#9400D3;stop-opacity:0.7" />
-                    <stop offset="50%" style="stop-color:#4B0082;stop-opacity:0.5" />
-                    <stop offset="100%" style="stop-color:#00BFFF;stop-opacity:0.3" />
-                </linearGradient>
-            </defs>
-            <g fill="none" stroke="url(#grad3)" stroke-width="1.5">
-                <circle cx="150" cy="150" r="130"/>
-                <circle cx="150" cy="150" r="100"/>
-                <circle cx="150" cy="150" r="70"/>
-            </g>
-            <g fill="url(#grad3)" opacity="0.2">
-                <path d="M150,50 L170,100 L230,100 L190,135 L210,190 L150,160 L90,190 L110,135 L70,100 L130,100 Z"/>
-            </g>
-        </svg>
-
-        <svg class="mandala-corner bottom-right" viewBox="0 0 300 300">
-            <defs>
-                <radialGradient id="grad4" cx="50%" cy="50%" r="70%">
-                    <stop offset="0%" style="stop-color:#32CD32;stop-opacity:0.6" />
-                    <stop offset="50%" style="stop-color:#FFD700;stop-opacity:0.4" />
-                    <stop offset="100%" style="stop-color:#FF8C00;stop-opacity:0.2" />
-                </radialGradient>
-            </defs>
-            <g fill="none" stroke="url(#grad4)" stroke-width="2">
-                <circle cx="150" cy="150" r="125"/>
-                <circle cx="150" cy="150" r="95"/>
-                <circle cx="150" cy="150" r="65"/>
-                <circle cx="150" cy="150" r="35"/>
-            </g>
-            <g fill="url(#grad4)" opacity="0.3">
-                <path d="M150,25 L175,85 L240,85 L200,125 L225,185 L150,150 L75,185 L100,125 L60,85 L125,85 Z"/>
-            </g>
-        </svg>
-
-        <svg class="mandala-center" viewBox="0 0 300 300">
-            <defs>
-                <radialGradient id="centerGrad" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
-                    <stop offset="30%" style="stop-color:#FF9933;stop-opacity:0.8" />
-                    <stop offset="60%" style="stop-color:#DC143C;stop-opacity:0.6" />
-                    <stop offset="100%" style="stop-color:#4B0082;stop-opacity:0.4" />
-                </radialGradient>
-            </defs>
-            <g fill="none" stroke="url(#centerGrad)" stroke-width="1">
-                <circle cx="150" cy="150" r="140"/>
-                <circle cx="150" cy="150" r="120"/>
-                <circle cx="150" cy="150" r="100"/>
-                <circle cx="150" cy="150" r="80"/>
-                <circle cx="150" cy="150" r="60"/>
-                <circle cx="150" cy="150" r="40"/>
-                <circle cx="150" cy="150" r="20"/>
-            </g>
-            <g fill="url(#centerGrad)" opacity="0.1">
-                <path d="M150,10 L170,70 L240,70 L190,110 L210,180 L150,140 L90,180 L110,110 L60,70 L130,70 Z"/>
-                <path d="M150,50 L160,90 L200,90 L175,115 L185,155 L150,135 L115,155 L125,115 L100,90 L140,90 Z"/>
-            </g>
-        </svg>
-    </div>
 
     <!-- Main Dashboard Content -->
     <main class="dashboard-main">

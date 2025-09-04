@@ -5,14 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manorakshak - Deep Analysis</title>
     <link rel="stylesheet" href="dashboard.css">
+    <style>
+         body {
+            background-image: url("design.jpg");
+            background-size: cover; /* image ko full screen fit karega */
+            background-repeat: no-repeat; /* repeat nahi hoga */
+            background-position: center; /* center me rahega */
+            background-attachment: fixed; /* smooth scrolling ke liye */
+        }
+    </style>
     <script src="chart.min.js"></script>
 </head>
 <body>
+    <!-- Navigation Bar -->
+    <nav class="dashboard-navbar ancient-navbar">
+        <div class="navbar-content">
+            <div class="navbar-left">
+                <span class="navbar-logo">🪔</span>
+                <button class="nav-item back-btn ancient-btn" id="backBtn">
+                    <span class="btn-icon">←</span>
+                    <span class="btn-text">Back</span>
+                </button>
+                <span class="navbar-brand ancient-brand">
+                    <span class="brand-icon">🛡️</span> 
+                    <span class="brand-text">ManoRakshak</span>
+                </span>
+            </div>
+            <div class="navbar-right">
+                <button class="nav-item ancient-nav-btn" data-tab="dashboard">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-text">Dashboard</span>
+                    <div class="nav-ornament"></div>
+                </button>
+                <button class="nav-item ancient-nav-btn" data-tab="content">
+                    <span class="nav-icon">📜</span>
+                    <span class="nav-text">Content</span>
+                    <div class="nav-ornament"></div>
+                </button>
+                <button class="nav-item ancient-nav-btn active" data-tab="analyse">
+                    <span class="nav-icon">🔮</span>
+                    <span class="nav-text">Analyse</span>
+                    <div class="nav-ornament"></div>
+                </button>
+                <button class="nav-item ancient-nav-btn" data-tab="login">
+                    <span class="nav-icon">🔑</span>
+                    <span class="nav-text">Login</span>
+                    <div class="nav-ornament"></div>
+                </button>
+            </div>
+        </div>
+        <div class="navbar-border"></div>
+    </nav>
+
+    <!-- Header / Welcome Section -->
     <header class="dashboard-header">
         <div class="header-content">
-            <div class="back-btn" id="backBtn">
-                <span>←</span> Back to Dashboard
-            </div>
+            <div class="header-ornament">🕉️</div>
             <h1>Deep Analysis</h1>
             <div class="user-greeting">
                 <h2 id="analysisGreeting">🔍 Mental Health Insights</h2>
@@ -21,25 +69,6 @@
         </div>
     </header>
 
-    <nav class="dashboard-navbar">
-        <div class="navbar-content">
-            <button class="nav-item" data-tab="dashboard">Dashboard</button>
-            <button class="nav-item" data-tab="content">Content</button>
-            <button class="nav-item active" data-tab="analyse">Analyse</button>
-            <button class="nav-item" data-tab="login">Login</button>
-        </div>
-    </nav>
-
-    <div class="mandala-bg">
-        <svg class="mandala-corner top-left" viewBox="0 0 200 200">
-            <circle cx="100" cy="100" r="80" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.3"/>
-            <path d="M100,20 L110,50 L140,50 L118,68 L128,98 L100,80 L72,98 L82,68 L60,50 L90,50 Z" fill="#FFD700" opacity="0.1"/>
-        </svg>
-        <svg class="mandala-corner bottom-right" viewBox="0 0 200 200">
-            <circle cx="100" cy="100" r="60" fill="none" stroke="#FF9933" stroke-width="1" opacity="0.2"/>
-            <path d="M100,20 L110,50 L140,50 L118,68 L128,98 L100,80 L72,98 L82,68 L60,50 L90,50 Z" fill="#FF9933" opacity="0.1"/>
-        </svg>
-    </div>
 
     <main class="dashboard-main">
         <section class="dashboard-section">
