@@ -54,6 +54,10 @@
         /* Enhanced Header Styles */
         .dashboard-header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--sacred-orange) 50%, var(--primary-light) 100%);
+            background-image: url('dark.jpg');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
             color: white;
             padding: 3rem 0;
             text-align: center;
@@ -510,6 +514,10 @@
         /* Mandala Card Styles */
         .dashboard-section {
             background: #FFEFBF;
+            background-image: url('card.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             border-radius: 28px;
             box-shadow: 
                 0 8px 32px 0 rgba(139, 69, 19, 0.15), 
@@ -528,24 +536,13 @@
         .dashboard-section::before {
             content: '';
             position: absolute;
-            top: -4px;
-            left: -4px;
-            right: -4px;
-            bottom: -4px;
-            background: 
-                radial-gradient(circle at 20% 20%, #8B4513 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, #A0522D 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, #CD853F 0%, transparent 70%),
-                conic-gradient(from 0deg, 
-                    #8B4513 0deg, 
-                    #A0522D 60deg, 
-                    #CD853F 120deg, 
-                    #D2691E 180deg, 
-                    #8B4513 240deg, 
-                    #A0522D 300deg, 
-                    #8B4513 360deg);
-            border-radius: 32px;
-            z-index: -1;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 239, 191, 0.7);
+            border-radius: 28px;
+            z-index: 0;
         }
 
         .dashboard-section:hover {
@@ -596,6 +593,7 @@
             position: relative;
             text-transform: uppercase;
             letter-spacing: 1px;
+            z-index: 1;
         }
 
         .dashboard-section h3::before,
@@ -614,6 +612,12 @@
             height: 4px;
             background: var(--gradient);
             border-radius: 3px;
+        }
+
+        /* Ensure all content inside cards appears above the overlay */
+        .dashboard-section > * {
+            position: relative;
+            z-index: 1;
         }
 
         /* Enhanced Mood Score Section */
