@@ -1480,6 +1480,8 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 1.5rem;
+            overflow-x: hidden;  /* hides unwanted horizontal overflow */
+
         }
 
         .achievement-badge {
