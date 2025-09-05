@@ -54,16 +54,6 @@ function infoByPercent(p){
 
 // ----- Init UI -----
 (async function init(){
-  // Hamburger menu
-  const menu = document.getElementById('menu');
-  document.getElementById('hamburger').addEventListener('click', ()=> {
-    menu.classList.toggle('hidden');
-  });
-  document.addEventListener('click', (e)=>{
-    if (!menu.contains(e.target) && !e.target.closest('#hamburger')) {
-      menu.classList.add('hidden');
-    }
-  });
 
   // Open analysis / dashboard pages
   const openPage = (file) => {
@@ -71,11 +61,11 @@ function infoByPercent(p){
     if (chrome?.tabs?.create) chrome.tabs.create({ url });
     else window.open(url, '_blank');
   };
-  document.getElementById('openAnalysis').onclick = ()=> openPage('analysis.html');
-  document.getElementById('openDashboard').onclick = ()=> openPage('frontend/dashboard.html');
-
-  // View Dashboard button
-  document.getElementById('viewDashboard').onclick = ()=> openPage('frontend/dashboard.html');
+  // View Dashboard button (robust binding)
+  const viewDashBtn = document.getElementById('viewDashboard');
+  if (viewDashBtn) {
+    viewDashBtn.onclick = ()=> openPage('frontend/dashboard.html');
+  }
 
  const qWrap = document.getElementById('quotes');
   if (qWrap) {
