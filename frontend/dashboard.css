@@ -731,14 +731,7 @@
             left: -2px;
             right: -2px;
             bottom: -2px;
-            background: 
-                radial-gradient(circle at 25% 25%, #f8f411 0%, transparent 50%),
-                radial-gradient(circle at 75% 75%, #f8f411 0%, transparent 50%),
-                conic-gradient(from 0deg, 
-                    #8B4513 0deg, 
-                    #A0522D 120deg, 
-                    #CD853F 240deg, 
-                    #8B4513 360deg);
+           background-color: white;
             border-radius: 22px;
             z-index: -1;
         }
@@ -2054,4 +2047,127 @@
 
 .navbar-brand {
     color: var(--gold) !important;
+}
+/* Animated Golden Chakra Background for Dashboard */
+body {
+    background: linear-gradient(45deg, #FFD700, #FF9933, #FFD700, #FFA500) !important;
+    background-size: 400% 400% !important;
+    animation: chakraFlow 8s ease-in-out infinite !important;
+}
+
+@keyframes chakraFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Golden Chakra Circles */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 20%, rgba(255, 215, 0, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 153, 51, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(255, 165, 0, 0.2) 0%, transparent 60%);
+    z-index: -1;
+    animation: chakraSpin 20s linear infinite;
+}
+
+@keyframes chakraSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+/* White Background with Golden Chakras */
+body {
+    background: white !important;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 20%, rgba(255, 215, 0, 0.15) 0%, transparent 30%),
+        radial-gradient(circle at 80% 80%, rgba(255, 153, 51, 0.15) 0%, transparent 30%),
+        radial-gradient(circle at 50% 50%, rgba(255, 165, 0, 0.1) 0%, transparent 40%);
+    z-index: -1;
+    animation: chakraSpin 20s linear infinite;
+}
+
+@keyframes chakraSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+/* Fix Card Height */
+.dashboard-section {
+    min-height: auto !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 1.5rem !important;
+}
+/* Flower.jpg Header Background */
+.dashboard-header {
+    background-image: url('flower.jpg') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-blend-mode: overlay !important;
+}
+/* Flower.jpg Dashboard Background */
+body {
+    background-image: url('flower.jpg') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-attachment: fixed !important;
+    background-repeat: no-repeat !important;
+}
+/* Dark.jpg Header Background */
+.dashboard-header {
+    background-image: url('dark.jpg') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-blend-mode: overlay !important;
+}
+/* Chart Container White Background */
+.chart-container {
+    background: white !important;
+}
+/* Chart Container Transparent Background */
+.chart-container {
+    background: transparent !important;
+}
+/* Recent Content Card Fixed Height with Scroll */
+.recent-content-section {
+    max-height: 400px !important;
+}
+
+#recentContentContainer {
+    max-height: 300px !important;
+    overflow-y: auto !important;
+}
+/* Match Recent Content Card Height with Divine Guidance */
+.recent-content-section {
+    height: 350px !important;
+    max-height: 350px !important;
+}
+
+#recentContentContainer {
+    height: 250px !important;
+    max-height: 250px !important;
+    overflow-y: auto !important;
+}
+/* Hide Scrollbar */
+#recentContentContainer {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+#recentContentContainer::-webkit-scrollbar {
+    display: none !important;
 }
