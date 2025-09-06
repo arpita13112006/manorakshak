@@ -2032,3 +2032,26 @@
     max-height: none;
     box-sizing: border-box;
 }
+
+/* Golden Shadow Override */
+.dashboard-section {
+    box-shadow: 0 8px 32px 0 rgba(255, 215, 0, 0.3), 0 4px 16px 0 rgba(255, 153, 51, 0.2), 0 2px 8px 0 rgba(212, 160, 23, 0.4) !important;
+}
+
+.dashboard-section:hover {
+    box-shadow: 0 16px 48px 0 rgba(255, 215, 0, 0.4), 0 8px 24px 0 rgba(255, 153, 51, 0.3), 0 4px 12px 0 rgba(212, 160, 23, 0.5) !important;
+}
+/* Navbar Color Override */
+.dashboard-navbar {
+    background: var(--ivory) !important;
+    border-bottom: 4px solid;
+    border-image: repeating-linear-gradient(90deg, var(--gold) 0px, var(--gold) 12px, var(--saffron) 12px, var(--saffron) 24px) 4 !important;
+}
+/* Golden Text Override */
+.nav-item {
+    color: var(--gold) !important;
+}
+
+.navbar-brand {
+    color: var(--gold) !important;
+}
