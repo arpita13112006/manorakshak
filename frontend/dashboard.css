@@ -2335,6 +2335,14 @@ body {
     font-size: 1.1em;
 }
 
+.video-description {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 8px;
+    line-height: 1.4;
+    font-style: italic;
+}
+
 .video-meta {
     display: flex;
     flex-wrap: wrap;

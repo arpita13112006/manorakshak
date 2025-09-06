@@ -27,6 +27,59 @@ function getPlatform() {
     return 'Unknown';
 }
 
+function getCurrentVideoData() {
+    const videoData = {
+        title: '',
+        description: '',
+        channel: '',
+        duration: 0,
+        url: window.location.href
+    };
+    
+    try {
+        // Get video title
+        const titleEl = document.querySelector('h1.ytd-video-primary-info-renderer, h1.title, ytd-video-primary-info-renderer h1');
+        if (titleEl) {
+            videoData.title = titleEl.textContent.trim();
+        }
+        
+        // Get channel name
+        const channelEl = document.querySelector('#channel-name a, ytd-video-owner-renderer #channel-name a, .ytd-channel-name a');
+        if (channelEl) {
+            videoData.channel = channelEl.textContent.trim();
+        }
+        
+        // Get video description
+        const descEl = document.querySelector('#description-text, ytd-video-secondary-info-renderer #description-text, .ytd-video-secondary-info-renderer #description');
+        if (descEl) {
+            videoData.description = descEl.textContent.trim();
+        }
+        
+        // Get video duration (if available)
+        const durationEl = document.querySelector('.ytp-time-duration, .ytd-thumbnail-overlay-time-status-renderer');
+        if (durationEl) {
+            const durationText = durationEl.textContent.trim();
+            videoData.duration = parseDuration(durationText);
+        }
+        
+    } catch (error) {
+        console.log('Manorakshak: Error getting video data:', error);
+    }
+    
+    return videoData;
+}
+
+function parseDuration(durationText) {
+    // Parse duration like "10:30" or "1:23:45" to seconds
+    const parts = durationText.split(':').map(Number);
+    if (parts.length === 2) {
+        return parts[0] * 60 + parts[1];
+    } else if (parts.length === 3) {
+        return parts[0] * 3600 + parts[1] * 60 + parts[2];
+    }
+    return 0;
+}
+
 function analyzeContent() {
     if (isAnalyzing) return;
     isAnalyzing = true;
@@ -38,7 +91,7 @@ function analyzeContent() {
     content.forEach(item => {
         if (item.text && item.text.length > 5 && !processedElements.has(item.id)) {
             console.log('Manorakshak: Found content:', item.text.substring(0, 50));
-            sendToBackend(item.text, platform);
+            sendToBackend(item.text, platform, item.type || 'general', item);
             processedElements.add(item.id);
         }
     });
@@ -52,35 +105,63 @@ function getContentFromPage() {
     
     try {
         if (platform === 'YouTube') {
-            // Video titles
-            const titles = document.querySelectorAll('h1.ytd-video-primary-info-renderer, #video-title, a#video-title, .ytd-rich-grid-media #video-title');
+            // Get current video information if on a video page
+            if (window.location.pathname.includes('/watch')) {
+                const videoData = getCurrentVideoData();
+                if (videoData.title) {
+                    content.push({
+                        text: videoData.title,
+                        id: 'yt-current-title-' + Date.now(),
+                        type: 'video_title',
+                        videoData: videoData
+                    });
+                }
+                if (videoData.description) {
+                    content.push({
+                        text: videoData.description,
+                        id: 'yt-current-desc-' + Date.now(),
+                        type: 'video_description',
+                        videoData: videoData
+                    });
+                }
+            }
+            
+            // Video titles from feed/grid
+            const titles = document.querySelectorAll('h1.ytd-video-primary-info-renderer, #video-title, a#video-title, .ytd-rich-grid-media #video-title, ytd-video-renderer #video-title, ytd-rich-item-renderer #video-title');
             titles.forEach((title, index) => {
                 if (title.textContent.trim()) {
+                    const channelEl = title.closest('ytd-video-renderer, ytd-rich-item-renderer, ytd-grid-video-renderer')?.querySelector('#channel-name, .ytd-channel-name a, ytd-channel-name a');
+                    const channel = channelEl ? channelEl.textContent.trim() : 'Unknown Channel';
+                    
                     content.push({
                         text: title.textContent.trim(),
-                        id: 'yt-title-' + index + '-' + title.textContent.length
+                        id: 'yt-title-' + index + '-' + title.textContent.length,
+                        type: 'video_title',
+                        channel: channel
                     });
                 }
             });
             
             // Comments
-            const comments = document.querySelectorAll('#content-text, .ytd-comment-renderer #content-text');
+            const comments = document.querySelectorAll('#content-text, .ytd-comment-renderer #content-text, ytd-comment-thread-renderer #content-text');
             comments.forEach((comment, index) => {
-                if (comment.textContent.trim()) {
+                if (comment.textContent.trim() && comment.textContent.length > 10) {
                     content.push({
                         text: comment.textContent.trim(),
-                        id: 'yt-comment-' + index + '-' + comment.textContent.length
+                        id: 'yt-comment-' + index + '-' + comment.textContent.length,
+                        type: 'comment'
                     });
                 }
             });
             
             // Video descriptions
-            const descriptions = document.querySelectorAll('.ytd-video-secondary-info-renderer #description, #description-text');
+            const descriptions = document.querySelectorAll('.ytd-video-secondary-info-renderer #description, #description-text, ytd-video-secondary-info-renderer #description-text');
             descriptions.forEach((desc, index) => {
                 if (desc.textContent.trim()) {
                     content.push({
                         text: desc.textContent.trim().substring(0, 200),
-                        id: 'yt-desc-' + index + '-' + desc.textContent.length
+                        id: 'yt-desc-' + index + '-' + desc.textContent.length,
+                        type: 'video_description'
                     });
                 }
             });
@@ -145,7 +226,7 @@ function getContentFromPage() {
     return content;
 }
 
-async function sendToBackend(text, platform) {
+async function sendToBackend(text, platform, contentType = 'general', additionalData = {}) {
     if (!extensionValid || !checkExtensionContext()) {
         console.log('Manorakshak: Extension context invalidated, stopping');
         return;
@@ -154,14 +235,26 @@ async function sendToBackend(text, platform) {
     try {
         console.log('Manorakshak: Sending to backend:', text.substring(0, 30));
         
+        const payload = { 
+            text, 
+            platform, 
+            contentType,
+            ...additionalData
+        };
+        
         const response = await fetch('http://localhost:3000/api/analyze-content', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text, platform })
+            body: JSON.stringify(payload)
         });
         
         const result = await response.json();
         console.log('Manorakshak: Backend response:', result);
+        
+        // If this is video content, also send to video history
+        if (contentType === 'video_title' && additionalData.videoData) {
+            await sendVideoToHistory(additionalData.videoData, result.sentiment);
+        }
         
         // Add alert for negative content
         if (result.sentiment === 'toxic' || result.sentiment === 'negative') {
@@ -182,6 +275,55 @@ async function sendToBackend(text, platform) {
             return;
         }
         console.log('Manorakshak: Backend communication error:', error);
+    }
+}
+
+async function sendVideoToHistory(videoData, sentiment) {
+    try {
+        const category = categorizeVideo(videoData.title, videoData.description);
+        
+        await fetch('http://localhost:3000/api/video-history', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                title: videoData.title,
+                description: videoData.description,
+                channel: videoData.channel,
+                duration: videoData.duration,
+                category: category,
+                sentiment: sentiment,
+                platform: 'YouTube',
+                url: videoData.url
+            })
+        });
+        
+        console.log('Manorakshak: Video added to history:', videoData.title);
+    } catch (error) {
+        console.log('Manorakshak: Failed to add video to history:', error);
+    }
+}
+
+function categorizeVideo(title, description) {
+    const text = (title + ' ' + description).toLowerCase();
+    
+    if (text.includes('tutorial') || text.includes('how to') || text.includes('learn') || text.includes('education')) {
+        return 'Education';
+    } else if (text.includes('music') || text.includes('song') || text.includes('concert')) {
+        return 'Music';
+    } else if (text.includes('gaming') || text.includes('game') || text.includes('play')) {
+        return 'Gaming';
+    } else if (text.includes('news') || text.includes('breaking') || text.includes('update')) {
+        return 'News';
+    } else if (text.includes('comedy') || text.includes('funny') || text.includes('joke')) {
+        return 'Entertainment';
+    } else if (text.includes('cooking') || text.includes('recipe') || text.includes('food')) {
+        return 'Lifestyle';
+    } else if (text.includes('fitness') || text.includes('workout') || text.includes('exercise')) {
+        return 'Health';
+    } else if (text.includes('travel') || text.includes('vlog') || text.includes('adventure')) {
+        return 'Travel';
+    } else {
+        return 'General';
     }
 }
 

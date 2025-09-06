@@ -123,16 +123,27 @@ app.post('/api/calm-mode', (req, res) => {
 });
 
 app.post('/api/analyze-content', (req, res) => {
-    const { text, platform } = req.body;
+    const { text, platform, contentType, videoData, channel } = req.body;
     const sentiment = analyzeText(text);
     
-    // Store analyzed content
-    userData.analyzedContent.push({
-        text: text.substring(0, 100),
+    // Store analyzed content with more details
+    const contentEntry = {
+        text: text.substring(0, 200), // Increased limit for video titles/descriptions
         sentiment,
         platform,
+        contentType: contentType || 'general',
         timestamp: new Date()
-    });
+    };
+    
+    // Add additional data if available
+    if (videoData) {
+        contentEntry.videoData = videoData;
+    }
+    if (channel) {
+        contentEntry.channel = channel;
+    }
+    
+    userData.analyzedContent.push(contentEntry);
     
     if (userData.analyzedContent.length > 50) {
         userData.analyzedContent = userData.analyzedContent.slice(-30);
@@ -199,27 +210,43 @@ app.post('/api/summarize-content', async (req, res) => {
 });
 
 app.post('/api/video-history', (req, res) => {
-    const { title, duration, category, sentiment, platform } = req.body;
+    const { title, description, channel, duration, category, sentiment, platform, url } = req.body;
     
     const videoEntry = {
         id: Date.now(),
         title: title || 'Unknown Video',
+        description: description || '',
+        channel: channel || 'Unknown Channel',
         duration: duration || 0,
         category: category || 'General',
         sentiment: sentiment || 'neutral',
         platform: platform || 'YouTube',
+        url: url || '',
         timestamp: new Date(),
         date: new Date().toISOString().slice(0, 10)
     };
     
-    userData.videoHistory.push(videoEntry);
+    // Check if this video already exists (avoid duplicates)
+    const existingVideo = userData.videoHistory.find(v => 
+        v.title === videoEntry.title && 
+        v.channel === videoEntry.channel &&
+        Math.abs(new Date(v.timestamp) - new Date(videoEntry.timestamp)) < 60000 // Within 1 minute
+    );
     
-    // Keep only last 100 videos
-    if (userData.videoHistory.length > 100) {
-        userData.videoHistory = userData.videoHistory.slice(-100);
+    if (!existingVideo) {
+        userData.videoHistory.push(videoEntry);
+        
+        // Keep only last 100 videos
+        if (userData.videoHistory.length > 100) {
+            userData.videoHistory = userData.videoHistory.slice(-100);
+        }
+        
+        saveUserData();
+        console.log('Video added to history:', videoEntry.title);
+    } else {
+        console.log('Video already exists in history:', videoEntry.title);
     }
     
-    saveUserData();
     res.json({ success: true, video: videoEntry });
 });
 

@@ -674,16 +674,48 @@ class DashboardManager {
             return;
         }
         
-        container.innerHTML = content.map(item => `
-            <div class="content-item ${item.sentiment}">
-                <div class="content-text">${item.text}...</div>
-                <div class="content-meta">
-                    <span class="sentiment-badge ${item.sentiment}">${item.sentiment}</span>
-                    <span class="platform">${item.platform}</span>
-                    <span class="time">${new Date(item.timestamp).toLocaleTimeString()}</span>
+        container.innerHTML = content.map(item => {
+            const timeAgo = this.getTimeAgo(new Date(item.timestamp));
+            const contentType = item.contentType || 'general';
+            const icon = this.getContentIcon(contentType, item.platform);
+            
+            let displayText = item.text;
+            if (item.videoData && item.videoData.title) {
+                displayText = `🎥 ${item.videoData.title}`;
+                if (item.videoData.channel) {
+                    displayText += ` - ${item.videoData.channel}`;
+                }
+            }
+            
+            return `
+                <div class="content-item ${item.sentiment}">
+                    <div class="content-text">${icon} ${displayText}</div>
+                    <div class="content-meta">
+                        <span class="sentiment-badge ${item.sentiment}">${this.capitalizeFirst(item.sentiment)}</span>
+                        <span class="platform">📍 ${item.platform}</span>
+                        <span class="time">⏰ ${timeAgo}</span>
+                        ${item.channel ? `<span class="channel">👤 ${item.channel}</span>` : ''}
+                    </div>
                 </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
+    }
+    
+    getContentIcon(contentType, platform) {
+        const icons = {
+            'video_title': '🎥',
+            'video_description': '📝',
+            'comment': '💬',
+            'post': '📱',
+            'tweet': '🐦',
+            'caption': '📸'
+        };
+        
+        return icons[contentType] || (platform === 'YouTube' ? '📺' : '📱');
+    }
+    
+    capitalizeFirst(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
     async generateAIReport() {
@@ -814,11 +846,13 @@ class DashboardManager {
             container.innerHTML = videos.map(video => `
                 <div class="video-item ${video.sentiment}">
                     <div class="video-title">🎥 ${video.title}</div>
+                    ${video.description ? `<div class="video-description">${video.description.substring(0, 100)}${video.description.length > 100 ? '...' : ''}</div>` : ''}
                     <div class="video-meta">
-                        <span class="sentiment-badge ${video.sentiment}">${video.sentiment}</span>
+                        <span class="sentiment-badge ${video.sentiment}">${this.capitalizeFirst(video.sentiment)}</span>
                         <span>🎭 ${video.category}</span>
                         <span>⏱️ ${this.formatDuration(video.duration)}</span>
                         <span>📺 ${video.platform}</span>
+                        ${video.channel ? `<span>👤 ${video.channel}</span>` : ''}
                         <span>🕐 ${new Date(video.timestamp).toLocaleTimeString()}</span>
                     </div>
                 </div>
