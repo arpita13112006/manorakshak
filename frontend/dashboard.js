@@ -8,12 +8,14 @@ class DashboardManager {
         this.alerts = [];
         this.achievements = [];
         this.calmModeEnabled = false;
+        this.videoAnalytics = {};
         
         this.init();
     }
 
     async init() {
         await this.loadUserData();
+        await this.loadVideoAnalytics();
         this.setupEventListeners();
         this.initializeCharts();
         this.populateDashboard();
@@ -239,6 +241,7 @@ class DashboardManager {
     initializeCharts() {
         // Always use fallback charts for now
         this.createFallbackCharts();
+        this.createVideoCharts();
     }
     
     createFallbackCharts() {
@@ -270,6 +273,113 @@ class DashboardManager {
             ctx.arc(140, 140, 100, 1.5 * Math.PI, 2 * Math.PI);
             ctx.fill();
         }
+    }
+    
+    createVideoCharts() {
+        setTimeout(() => {
+            this.createVideoTrendChart();
+            this.createCategoryChart();
+        }, 100);
+    }
+    
+    createVideoTrendChart() {
+        const canvas = document.getElementById('videoTrendChart');
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        const data = this.videoAnalytics.dailyStats || [];
+        
+        if (data.length === 0) {
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#8B4513';
+            ctx.font = 'bold 16px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('📊 Click "Add Sample Videos" to see chart', canvas.width/2, canvas.height/2);
+            return;
+        }
+        
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        const maxVideos = Math.max(...data.map(d => d.videos), 1);
+        const barWidth = 40;
+        const spacing = 10;
+        const startX = 30;
+        
+        data.forEach((day, i) => {
+            const x = startX + i * (barWidth + spacing);
+            const height = (day.videos / maxVideos) * 120;
+            const y = 150 - height;
+            
+            ctx.fillStyle = '#d4a017';
+            ctx.fillRect(x, y, barWidth, height);
+            
+            ctx.fillStyle = '#333';
+            ctx.font = '10px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(day.date.slice(-5), x + barWidth/2, 170);
+            ctx.fillText(day.videos.toString(), x + barWidth/2, y - 5);
+        });
+    }
+    
+    createCategoryChart() {
+        const canvas = document.getElementById('categoryChart');
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        const categories = this.videoAnalytics.categoryBreakdown || {};
+        
+        if (Object.keys(categories).length === 0) {
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#8B4513';
+            ctx.font = 'bold 16px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('🎭 Click "Add Sample Videos"', canvas.width/2, canvas.height/2 - 10);
+            ctx.fillText('to see categories', canvas.width/2, canvas.height/2 + 10);
+            return;
+        }
+        
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const radius = 80;
+        
+        const total = Object.values(categories).reduce((sum, count) => sum + count, 0);
+        const colors = ['#d4a017', '#8B4513', '#FF6B35', '#4ECDC4', '#45B7D1', '#96CEB4'];
+        
+        let currentAngle = 0;
+        Object.entries(categories).forEach(([category, count], i) => {
+            const sliceAngle = (count / total) * 2 * Math.PI;
+            
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);
+            ctx.closePath();
+            ctx.fillStyle = colors[i % colors.length];
+            ctx.fill();
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            const labelAngle = currentAngle + sliceAngle / 2;
+            const labelX = centerX + Math.cos(labelAngle) * (radius + 30);
+            const labelY = centerY + Math.sin(labelAngle) * (radius + 30);
+            
+            ctx.fillStyle = '#333';
+            ctx.font = '11px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(category, labelX, labelY);
+            
+            currentAngle += sliceAngle;
+        });
     }
 
     initializeTrendChart() {
@@ -380,6 +490,9 @@ class DashboardManager {
         
         // Populate achievements
         this.populateAchievements();
+        
+        // Populate video analytics
+        this.populateVideoAnalytics();
     }
 
     populateAlerts() {
@@ -636,11 +749,131 @@ class DashboardManager {
         btn.disabled = false;
     }
 
+    async loadVideoAnalytics() {
+        try {
+            const response = await fetch('http://localhost:3000/api/video-analytics');
+            if (response.ok) {
+                this.videoAnalytics = await response.json();
+            }
+        } catch (error) {
+            console.log('Video analytics load failed:', error);
+            this.videoAnalytics = {
+                totalVideos: 0,
+                totalWatchTime: 0,
+                categoryBreakdown: {},
+                sentimentBreakdown: { positive: 0, negative: 0, neutral: 0, toxic: 0 },
+                dailyStats: [],
+                platformStats: {},
+                weeklyTrend: []
+            };
+        }
+    }
+    
+    populateVideoAnalytics() {
+        const analytics = this.videoAnalytics;
+        
+        // Update stats
+        document.getElementById('totalVideos').textContent = analytics.totalVideos || 0;
+        
+        const hours = Math.floor((analytics.totalWatchTime || 0) / 3600);
+        const minutes = Math.floor(((analytics.totalWatchTime || 0) % 3600) / 60);
+        document.getElementById('totalWatchTime').textContent = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+        
+        const avgSentiment = this.calculateOverallSentiment(analytics.sentimentBreakdown);
+        document.getElementById('avgSentiment').textContent = `${avgSentiment}%`;
+        
+        // Populate recent videos
+        this.populateRecentVideos();
+    }
+    
+    calculateOverallSentiment(breakdown) {
+        const total = Object.values(breakdown).reduce((sum, count) => sum + count, 0);
+        if (total === 0) return 0;
+        
+        const scores = { positive: 80, neutral: 50, negative: 20, toxic: 10 };
+        const weightedSum = Object.entries(breakdown).reduce((sum, [sentiment, count]) => {
+            return sum + (scores[sentiment] || 50) * count;
+        }, 0);
+        
+        return Math.round(weightedSum / total);
+    }
+    
+    async populateRecentVideos() {
+        try {
+            const response = await fetch('http://localhost:3000/api/dashboard');
+            const data = await response.json();
+            const videos = (data.videoHistory || []).slice(-5).reverse();
+            
+            const container = document.getElementById('recentVideosContainer');
+            
+            if (videos.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666;">No video history available. Start watching videos to see analytics!</p>';
+                return;
+            }
+            
+            container.innerHTML = videos.map(video => `
+                <div class="video-item ${video.sentiment}">
+                    <div class="video-title">🎥 ${video.title}</div>
+                    <div class="video-meta">
+                        <span class="sentiment-badge ${video.sentiment}">${video.sentiment}</span>
+                        <span>🎭 ${video.category}</span>
+                        <span>⏱️ ${this.formatDuration(video.duration)}</span>
+                        <span>📺 ${video.platform}</span>
+                        <span>🕐 ${new Date(video.timestamp).toLocaleTimeString()}</span>
+                    </div>
+                </div>
+            `).join('');
+        } catch (error) {
+            console.log('Recent videos load failed:', error);
+        }
+    }
+    
+    formatDuration(seconds) {
+        if (!seconds) return '0s';
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        
+        if (hours > 0) return `${hours}h ${minutes}m`;
+        if (minutes > 0) return `${minutes}m ${secs}s`;
+        return `${secs}s`;
+    }
+    
+    // Method to simulate adding video history (for testing)
+    async addSampleVideo() {
+        const sampleVideos = [
+            { title: 'Meditation Tutorial', duration: 600, category: 'Wellness', sentiment: 'positive', platform: 'YouTube' },
+            { title: 'Cooking Recipe', duration: 480, category: 'Lifestyle', sentiment: 'neutral', platform: 'YouTube' },
+            { title: 'News Update', duration: 300, category: 'News', sentiment: 'negative', platform: 'YouTube' },
+            { title: 'Comedy Sketch', duration: 240, category: 'Entertainment', sentiment: 'positive', platform: 'YouTube' },
+            { title: 'Educational Content', duration: 720, category: 'Education', sentiment: 'positive', platform: 'YouTube' }
+        ];
+        
+        const video = sampleVideos[Math.floor(Math.random() * sampleVideos.length)];
+        
+        try {
+            await fetch('http://localhost:3000/api/video-history', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(video)
+            });
+            
+            await this.loadVideoAnalytics();
+            this.populateVideoAnalytics();
+            this.createVideoCharts();
+        } catch (error) {
+            console.log('Sample video add failed:', error);
+        }
+    }
+
     startRealTimeUpdates() {
         setInterval(() => {
             this.loadUserData().then(() => {
                 this.populateDashboard();
                 this.loadInsights();
+                this.loadVideoAnalytics().then(() => {
+                    this.createVideoCharts();
+                });
                 if (this.trendChart && typeof Chart !== 'undefined') {
                     this.trendChart.data.datasets[0].data = this.trendData.map(d => d.score);
                     this.trendChart.update();

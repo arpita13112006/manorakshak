@@ -8,17 +8,14 @@ let model = null;
 
 try {
     const { GoogleGenerativeAI } = require('@google/generative-ai');
-    const GEMINI_API_KEY = process.env.GEMINI_API_KEY || 'YOUR_GEMINI_API_KEY_HERE';
+    const GEMINI_API_KEY = 'AIzaSyBqcpbnL6MbWkm7D-qx8nYyDDCa004Uh_A';
     
-    if (GEMINI_API_KEY && GEMINI_API_KEY !== 'YOUR_GEMINI_API_KEY_HERE') {
-        genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-        model = genAI.getGenerativeModel({ model: 'gemini-pro' });
-        console.log('Gemini AI initialized');
-    } else {
-        console.log('Gemini API key not provided - AI features disabled');
-    }
+    genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+    model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    console.log('✅ Gemini AI initialized successfully');
 } catch (error) {
-    console.log('Gemini AI not available - AI features disabled');
+    console.log('❌ Gemini AI initialization failed:', error.message);
+    console.log('Install: npm install @google/generative-ai');
 }
 
 app.use(express.json());
@@ -44,6 +41,7 @@ const userDataSchema = new mongoose.Schema({
     goals: { type: Array, default: [] },
     insights: { type: Array, default: [] },
     analyzedContent: { type: Array, default: [] },
+    videoHistory: { type: Array, default: [] },
     lastUpdated: { type: Date, default: Date.now }
 });
 
@@ -60,7 +58,8 @@ let userData = {
     calmMode: false,
     goals: [],
     insights: [],
-    analyzedContent: []
+    analyzedContent: [],
+    videoHistory: []
 };
 
 async function connectMongoDB() {
@@ -197,6 +196,36 @@ app.post('/api/summarize-content', async (req, res) => {
     } catch (error) {
         res.json({ error: error.message, success: false });
     }
+});
+
+app.post('/api/video-history', (req, res) => {
+    const { title, duration, category, sentiment, platform } = req.body;
+    
+    const videoEntry = {
+        id: Date.now(),
+        title: title || 'Unknown Video',
+        duration: duration || 0,
+        category: category || 'General',
+        sentiment: sentiment || 'neutral',
+        platform: platform || 'YouTube',
+        timestamp: new Date(),
+        date: new Date().toISOString().slice(0, 10)
+    };
+    
+    userData.videoHistory.push(videoEntry);
+    
+    // Keep only last 100 videos
+    if (userData.videoHistory.length > 100) {
+        userData.videoHistory = userData.videoHistory.slice(-100);
+    }
+    
+    saveUserData();
+    res.json({ success: true, video: videoEntry });
+});
+
+app.get('/api/video-analytics', (req, res) => {
+    const analytics = generateVideoAnalytics();
+    res.json(analytics);
 });
 
 function analyzeText(text) {
@@ -376,6 +405,94 @@ async function summarizeWithAI(content) {
     } catch (error) {
         return content.length > 100 ? content.substring(0, 100) + '...' : content;
     }
+}
+
+function generateVideoAnalytics() {
+    const videos = userData.videoHistory || [];
+    
+    if (videos.length === 0) {
+        return {
+            totalVideos: 0,
+            totalWatchTime: 0,
+            categoryBreakdown: {},
+            sentimentBreakdown: { positive: 0, negative: 0, neutral: 0, toxic: 0 },
+            dailyStats: [],
+            platformStats: {},
+            weeklyTrend: []
+        };
+    }
+    
+    // Calculate total stats
+    const totalVideos = videos.length;
+    const totalWatchTime = videos.reduce((sum, v) => sum + (v.duration || 0), 0);
+    
+    // Category breakdown
+    const categoryBreakdown = {};
+    videos.forEach(v => {
+        categoryBreakdown[v.category] = (categoryBreakdown[v.category] || 0) + 1;
+    });
+    
+    // Sentiment breakdown
+    const sentimentBreakdown = { positive: 0, negative: 0, neutral: 0, toxic: 0 };
+    videos.forEach(v => {
+        sentimentBreakdown[v.sentiment] = (sentimentBreakdown[v.sentiment] || 0) + 1;
+    });
+    
+    // Platform stats
+    const platformStats = {};
+    videos.forEach(v => {
+        platformStats[v.platform] = (platformStats[v.platform] || 0) + 1;
+    });
+    
+    // Daily stats for last 7 days
+    const dailyStats = [];
+    const today = new Date();
+    
+    for (let i = 6; i >= 0; i--) {
+        const date = new Date(today);
+        date.setDate(date.getDate() - i);
+        const dateStr = date.toISOString().slice(0, 10);
+        
+        const dayVideos = videos.filter(v => v.date === dateStr);
+        const dayWatchTime = dayVideos.reduce((sum, v) => sum + (v.duration || 0), 0);
+        
+        dailyStats.push({
+            date: dateStr,
+            videos: dayVideos.length,
+            watchTime: dayWatchTime,
+            avgSentiment: calculateAvgSentiment(dayVideos)
+        });
+    }
+    
+    // Weekly trend
+    const weeklyTrend = dailyStats.map(day => ({
+        date: day.date,
+        value: day.videos
+    }));
+    
+    return {
+        totalVideos,
+        totalWatchTime,
+        categoryBreakdown,
+        sentimentBreakdown,
+        dailyStats,
+        platformStats,
+        weeklyTrend
+    };
+}
+
+function calculateAvgSentiment(videos) {
+    if (videos.length === 0) return 50;
+    
+    const sentimentScores = {
+        positive: 80,
+        neutral: 50,
+        negative: 20,
+        toxic: 10
+    };
+    
+    const totalScore = videos.reduce((sum, v) => sum + (sentimentScores[v.sentiment] || 50), 0);
+    return Math.round(totalScore / videos.length);
 }
 
 // Save data every 30 seconds

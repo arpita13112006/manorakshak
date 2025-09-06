@@ -2138,9 +2138,18 @@ body {
 .chart-container {
     background: white !important;
 }
-/* Chart Container Transparent Background */
+/* Chart Container White Background */
 .chart-container {
-    background: transparent !important;
+    background: white !important;
+}
+
+.chart-wrapper {
+    background: white !important;
+}
+
+.chart-wrapper canvas {
+    background: white !important;
+    border: 1px solid #ddd;
 }
 /* Recent Content Card Fixed Height with Scroll */
 .recent-content-section {
@@ -2170,4 +2179,188 @@ body {
 
 #recentContentContainer::-webkit-scrollbar {
     display: none !important;
+}
+/* Age Detection Mode Styles */
+.kids-mode .adult-content {
+    display: none !important;
+}
+
+.kids-mode {
+    filter: brightness(1.1) saturate(0.8);
+}
+
+.adult-mode .adult-content {
+    display: block !important;
+}
+/* Working Mode Styles */
+.kids-mode {
+    filter: brightness(1.2) saturate(0.9);
+}
+
+.kids-mode .adult-content {
+    display: none !important;
+}
+
+.kids-mode::after {
+    content: '🧒 Kids Mode Active - Safe Content Only';
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    z-index: 1000;
+}
+
+.adult-mode::after {
+    content: '👤 Adult Mode Active - Full Access';
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: var(--gold);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    z-index: 1000;
+}
+
+/* Video Analytics Styles */
+.video-history-section {
+    background: linear-gradient(135deg, #fff8e1 0%, #f3e5ab 100%);
+    border: 2px solid #d4a017;
+    border-radius: 15px;
+    padding: 25px;
+    margin: 20px 0;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.video-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid #d4a017;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stat-number {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #8B4513;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    color: #666;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.charts-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-bottom: 25px;
+}
+
+.chart-wrapper {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #d4a017;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+}
+
+.chart-wrapper h4 {
+    color: #8B4513;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+.chart-wrapper canvas {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.video-history-list {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #d4a017;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.video-history-list h4 {
+    color: #8B4513;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+.video-item {
+    background: rgba(255, 255, 255, 0.8);
+    border-left: 4px solid #d4a017;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.video-item.positive {
+    border-left-color: #4CAF50;
+}
+
+.video-item.negative {
+    border-left-color: #F44336;
+}
+
+.video-item.toxic {
+    border-left-color: #FF5722;
+}
+
+.video-title {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+    font-size: 1.1em;
+}
+
+.video-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.video-meta span {
+    background: rgba(212, 160, 23, 0.1);
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(212, 160, 23, 0.3);
+}
+
+@media (max-width: 768px) {
+    .charts-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .video-stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .video-meta {
+        flex-direction: column;
+        gap: 5px;
+    }
 }
